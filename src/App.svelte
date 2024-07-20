@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { getHomeDir, getTodos } from "./helpers";
     import CheckBox from "./lib/CheckBox.svelte";
     import TopSection from "./lib/TopSection.svelte";
 
-    let todos = getTodos();
-    let homeDirPromise = getHomeDir();
+    import { getTodos } from "./helpers";
+
+    let todoPromise = getTodos();
 </script>
 
 <div data-tauri-drag-region class="dragging-region" />
@@ -12,13 +12,19 @@
     <div class="center-box">
         <TopSection />
 
-        {#each todos as todo, index}
-            <CheckBox
-                id={index.toString()}
-                finished={todo.finished}
-                labelName={todo.text}
-            />
-        {/each}
+        {#await todoPromise}
+            <span>Loading todos...</span>
+        {:then todos}
+            {#each todos as todo, index}
+                <CheckBox
+                    id={index.toString()}
+                    finished={todo.finished}
+                    labelName={todo.text}
+                />
+            {/each}
+        {:catch error}
+            <span>Error: {error}</span>
+        {/await}
     </div>
 </main>
 

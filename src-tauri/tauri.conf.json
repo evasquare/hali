@@ -22,6 +22,9 @@
         "setFullscreen": false
       },
       "fs": {
+        "scope": [
+          "$APPDATA/*"
+        ],
         "readFile": true,
         "writeFile": true,
         "createDir": true,
