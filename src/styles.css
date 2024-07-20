@@ -6,6 +6,10 @@
 
     color: #0f0f0f;
     background-color: #f6f6f6;
+    @media (prefers-color-scheme: dark) {
+        background-color: #202020;
+        color: #ffffff;
+    }
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;

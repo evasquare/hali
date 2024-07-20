@@ -1,8 +1,7 @@
 <script lang="ts">
     import CheckBox from "./lib/CheckBox.svelte";
     import TopSection from "./lib/TopSection.svelte";
-
-    import { getTodos } from "./helpers";
+    import { getTodos, saveTodos } from "./helpers";
 
     let todoPromise = getTodos();
 </script>

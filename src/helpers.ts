@@ -1,5 +1,10 @@
 import { fs } from "@tauri-apps/api";
-import { BaseDirectory, createDir, readTextFile } from "@tauri-apps/api/fs";
+import {
+    BaseDirectory,
+    createDir,
+    readTextFile,
+    writeTextFile,
+} from "@tauri-apps/api/fs";
 import { appDataDir, homeDir } from "@tauri-apps/api/path";
 
 export const getHomeDir = async () => {
@@ -32,4 +37,19 @@ export const getTodos = async (): Promise<Todo[]> => {
         todos.push(parsedTodos[key]);
     }
     return todos;
+};
+
+/** @example
+ * saveTodos([{ finished: true, text: "Test" }]);
+ */
+export const saveTodos = async (todos: Todo[]): Promise<void> => {
+    const appDataDirString = await appDataDir();
+
+    if (!fs.readDir(appDataDirString)) {
+        await createDir(appDataDirString);
+    }
+    const stringifiedTodos = JSON.stringify(todos, null, 4);
+    await writeTextFile("todos.json", stringifiedTodos, {
+        dir: BaseDirectory.AppData,
+    });
 };
