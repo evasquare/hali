@@ -1,7 +1,7 @@
-import { fs } from "@tauri-apps/api";
 import {
     BaseDirectory,
     createDir,
+    exists,
     readTextFile,
     writeTextFile,
 } from "@tauri-apps/api/fs";
@@ -22,32 +22,36 @@ interface Todo {
 }
 
 export const getTodos = async (): Promise<Todo[]> => {
-    const appDataDirString = await appDataDir();
-    if (!fs.readDir(appDataDirString)) {
-        await createDir(appDataDirString);
-    }
-
-    const todosJson = await readTextFile("todos.json", {
+    await createDir("users", {
         dir: BaseDirectory.AppData,
+        recursive: true,
     });
-    const parsedTodos = JSON.parse(todosJson);
 
-    const todos: Todo[] = [];
-    for (const key of Object.keys(parsedTodos)) {
-        todos.push(parsedTodos[key]);
+    if (await exists("todos.json", { dir: BaseDirectory.AppData })) {
+        const todosJson = await readTextFile("todos.json", {
+            dir: BaseDirectory.AppData,
+        });
+        const parsedTodos = JSON.parse(todosJson);
+
+        const todos: Todo[] = [];
+        for (const key of Object.keys(parsedTodos)) {
+            todos.push(parsedTodos[key]);
+        }
+        return todos;
+    } else {
+        return [];
     }
-    return todos;
 };
 
 /** @example
  * saveTodos([{ finished: true, text: "Test" }]);
  */
 export const saveTodos = async (todos: Todo[]): Promise<void> => {
-    const appDataDirString = await appDataDir();
+    await createDir("users", {
+        dir: BaseDirectory.AppData,
+        recursive: true,
+    });
 
-    if (!fs.readDir(appDataDirString)) {
-        await createDir(appDataDirString);
-    }
     const stringifiedTodos = JSON.stringify(todos, null, 4);
     await writeTextFile("todos.json", stringifiedTodos, {
         dir: BaseDirectory.AppData,

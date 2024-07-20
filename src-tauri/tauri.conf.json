@@ -25,6 +25,7 @@
         "scope": [
           "$APPDATA/*"
         ],
+        "exists": true,
         "readFile": true,
         "writeFile": true,
         "createDir": true,
