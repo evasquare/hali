@@ -7,13 +7,11 @@ import {
 } from "@tauri-apps/api/fs";
 import { homeDir } from "@tauri-apps/api/path";
 
-import type { Todo } from "./types";
+import type { Todo } from "../types";
 
 export const getHomeDir = async () => {
     return await homeDir();
 };
-
-
 
 export const getTodos = async (): Promise<Todo[]> => {
     await createDir("users", {

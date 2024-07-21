@@ -18,17 +18,20 @@
     -webkit-text-size-adjust: 100%;
 }
 
-.container {
+body {
+    width: 100%;
+    height: calc(100vh - 30px);
+
     margin: 0;
-    padding-top: 10vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
+}
+
+#app {
+    height: 100%;
 }
 
 .no-user-select {
+    cursor: default;
+
     user-select: none;
     -webkit-user-select: none;
-    cursor: default;
 }

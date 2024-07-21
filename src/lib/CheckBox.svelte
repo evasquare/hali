@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { todosStore } from '../store';
+    import { todosStore } from './store';
 
     export let finished: boolean | null;
     export let labelName: string | null;
