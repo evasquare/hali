@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { todosStore } from '../store';
+
     export let finished: boolean | null;
     export let labelName: string | null;
     export let id: string | null;
@@ -11,6 +13,15 @@
         }
     ) => {
         checked = !checked;
+
+        todosStore.update((todos) => {
+            for (let i = 0; i < todos.length; i++) {
+                if (todos[i].id == id) {
+                    todos[i].finished = checked;
+                }
+            }
+            return todos;
+        });
     };
 </script>
 
@@ -25,12 +36,7 @@
         />
         <label for={id}>{labelName}</label>
     {:else}
-        <input
-            type="checkbox"
-            {id}
-            name="scales"
-            on:click|preventDefault={handleCheckboxClick}
-        />
+        <input type="checkbox" {id} name="scales" on:click|preventDefault={handleCheckboxClick} />
         <label for={id}>{labelName}</label>
     {/if}
 </div>

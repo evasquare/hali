@@ -1,9 +1,15 @@
 <script lang="ts">
-    import CheckBox from "./lib/CheckBox.svelte";
-    import TopSection from "./lib/TopSection.svelte";
-    import { getTodos, saveTodos } from "./helpers";
+    import CheckBox from './lib/CheckBox.svelte';
+    import TopSection from './lib/TopSection.svelte';
+    import { saveTodos } from './helpers';
+    import { todosStore } from './store';
+    import type { Todo } from './types';
 
-    let todoPromise = getTodos();
+    let todos: Todo[];
+    todosStore.subscribe((value) => {
+        todos = value;
+        saveTodos(value);
+    });
 </script>
 
 <div data-tauri-drag-region class="dragging-region" />
@@ -11,19 +17,9 @@
     <div class="center-box">
         <TopSection />
 
-        {#await todoPromise}
-            <span>Loading todos...</span>
-        {:then todos}
-            {#each todos as todo, index}
-                <CheckBox
-                    id={index.toString()}
-                    finished={todo.finished}
-                    labelName={todo.text}
-                />
-            {/each}
-        {:catch error}
-            <span>Error: {error}</span>
-        {/await}
+        {#each todos as todo}
+            <CheckBox id={todo.id} finished={todo.finished} labelName={todo.text} />
+        {/each}
     </div>
 </main>
 
