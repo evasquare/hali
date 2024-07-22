@@ -1,4 +1,5 @@
 <script lang="ts">
+    import type { Todo } from '../types';
     import { todosStore } from './store';
 
     export let finished: boolean | null;
@@ -13,7 +14,6 @@
         }
     ) => {
         checked = !checked;
-
         todosStore.update((todos) => {
             for (let i = 0; i < todos.length; i++) {
                 if (todos[i].id == id) {
@@ -21,6 +21,25 @@
                 }
             }
             return todos;
+        });
+    };
+
+    const handleDelete = (
+        e: MouseEvent & {
+            currentTarget: EventTarget & HTMLButtonElement;
+        }
+    ) => {
+        todosStore.update((originalTodos) => {
+            const newTodos: Todo[] = [];
+
+            for (const todo of originalTodos) {
+                if (todo.id === id) {
+                    continue;
+                }
+                newTodos.push(todo);
+            }
+
+            return newTodos;
         });
     };
 </script>
@@ -34,9 +53,9 @@
             checked
             on:click|preventDefault={handleCheckboxClick}
         />
-        <label for={id}>{labelName}</label>
     {:else}
         <input type="checkbox" {id} name="scales" on:click|preventDefault={handleCheckboxClick} />
-        <label for={id}>{labelName}</label>
     {/if}
+    <button on:click={handleDelete}>X</button>
+    <label for={id}>{labelName}</label>
 </div>
