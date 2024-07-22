@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
-import { getTodos } from "./helpers";
+import { getTodoList } from "./helpers";
 
 import type { Todo } from "../types";
 
-export const todosStore = writable<Todo[]>(await getTodos());
+export const todoListPromiseStore = writable<Promise<Todo[]>>((getTodoList()));

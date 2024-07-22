@@ -1,30 +1,34 @@
 <script lang="ts">
     import CheckBox from './lib/CheckBox.svelte';
     import TopSection from './lib/TopSection.svelte';
-    import { saveTodos } from './lib/helpers';
-    import { todosStore } from './lib/store';
+    import { saveTodoList } from './lib/helpers';
+    import { todoListPromiseStore } from './lib/store';
     import type { Todo } from './types';
 
-    let todos: Todo[];
-    todosStore.subscribe((value) => {
-        todos = value;
-        saveTodos(value);
+    let todoListPromise: Promise<Todo[]>;
+    todoListPromiseStore.subscribe((newTodoListPromise) => {
+        todoListPromise = newTodoListPromise;
+        saveTodoList(newTodoListPromise);
     });
 
     let inputValue: string;
-    const handleSubmit = (
+    const handleSubmit = async (
         e: SubmitEvent & {
             currentTarget: EventTarget & HTMLFormElement;
         }
     ) => {
-        todosStore.update((todos) => {
-            todos.push({
+        await todoListPromiseStore.update(async (originalTodoListPromise) => {
+            const newTodoList = await originalTodoListPromise;
+
+            newTodoList.push({
                 id: String(Date.now()),
                 finished: false,
                 text: inputValue
             });
-            return todos;
+
+            return newTodoList;
         });
+
         inputValue = '';
     };
 </script>
@@ -35,9 +39,15 @@
         <div class="column-section-1">
             <TopSection />
 
-            {#each todos as todo}
-                <CheckBox id={todo.id} finished={todo.finished} labelName={todo.text} />
-            {/each}
+            {#await todoListPromise}
+                <span>Loading todos...</span>
+            {:then todoList}
+                {#each todoList as todo}
+                    <CheckBox id={todo.id} finished={todo.finished} labelName={todo.text} />
+                {/each}
+            {:catch error}
+                <span>Error: {error}</span>
+            {/await}
         </div>
 
         <div class="column-section-2">

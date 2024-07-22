@@ -13,39 +13,39 @@ export const getHomeDir = async () => {
     return await homeDir();
 };
 
-export const getTodos = async (): Promise<Todo[]> => {
+export const getTodoList = async (): Promise<Todo[]> => {
     await createDir("users", {
         dir: BaseDirectory.AppData,
         recursive: true,
     });
 
     if (await exists("todos.json", { dir: BaseDirectory.AppData })) {
-        const todosJson = await readTextFile("todos.json", {
+        const todoListJson = await readTextFile("todos.json", {
             dir: BaseDirectory.AppData,
         });
-        const parsedTodos = JSON.parse(todosJson);
+        const parsedTodoList = JSON.parse(todoListJson);
 
-        const todos: Todo[] = [];
-        for (const key of Object.keys(parsedTodos)) {
-            todos.push(parsedTodos[key]);
+        const todoList: Todo[] = [];
+        for (const key of Object.keys(parsedTodoList)) {
+            todoList.push(parsedTodoList[key]);
         }
-        return todos;
+        return todoList;
     } else {
         return [];
     }
 };
 
 /** @example
- * saveTodos([{ finished: true, text: "Test" }]);
+ * saveTodoList([{ id: "1", finished: true, text: "Test" }]);
  */
-export const saveTodos = async (todos: Todo[]): Promise<void> => {
+export const saveTodoList = async (todoListPromise: Promise<Todo[]>): Promise<void> => {
     await createDir("users", {
         dir: BaseDirectory.AppData,
         recursive: true,
     });
 
-    const stringifiedTodos = JSON.stringify(todos, null, 4);
-    await writeTextFile("todos.json", stringifiedTodos, {
+    const stringifiedTodoList = JSON.stringify(await todoListPromise, null, 4);
+    await writeTextFile("todos.json", stringifiedTodoList, {
         dir: BaseDirectory.AppData,
     });
 };

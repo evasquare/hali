@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Todo } from '../types';
-    import { todosStore } from './store';
+    import { todoListPromiseStore } from './store';
 
     export let finished: boolean | null;
     export let labelName: string | null;
@@ -14,13 +14,15 @@
         }
     ) => {
         checked = !checked;
-        todosStore.update((todos) => {
-            for (let i = 0; i < todos.length; i++) {
-                if (todos[i].id == id) {
-                    todos[i].finished = checked;
+        todoListPromiseStore.update(async (originalTodoListPromise) => {
+            const newTodoList = await originalTodoListPromise;
+            for (let i = 0; i < newTodoList.length; i++) {
+                if (newTodoList[i].id == id) {
+                    newTodoList[i].finished = checked;
                 }
             }
-            return todos;
+
+            return newTodoList;
         });
     };
 
@@ -29,17 +31,18 @@
             currentTarget: EventTarget & HTMLButtonElement;
         }
     ) => {
-        todosStore.update((originalTodos) => {
-            const newTodos: Todo[] = [];
+        todoListPromiseStore.update(async (originalTodoListPromise) => {
+            const originalTodoList = await originalTodoListPromise;
+            const newTodoList: Todo[] = [];
 
-            for (const todo of originalTodos) {
+            for (const todo of originalTodoList) {
                 if (todo.id === id) {
                     continue;
                 }
-                newTodos.push(todo);
+                newTodoList.push(todo);
             }
 
-            return newTodos;
+            return newTodoList;
         });
     };
 </script>
