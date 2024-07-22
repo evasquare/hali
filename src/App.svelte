@@ -10,6 +10,23 @@
         todos = value;
         saveTodos(value);
     });
+
+    let inputValue: string;
+    const handleSubmit = (
+        e: SubmitEvent & {
+            currentTarget: EventTarget & HTMLFormElement;
+        }
+    ) => {
+        todosStore.update((todos) => {
+            todos.push({
+                id: String(Date.now()),
+                finished: false,
+                text: inputValue
+            });
+            return todos;
+        });
+        inputValue = '';
+    };
 </script>
 
 <div data-tauri-drag-region class="dragging-region" />
@@ -24,8 +41,8 @@
         </div>
 
         <div class="column-section-2">
-            <form on:submit|preventDefault={() => {}}>
-                <input type="text" />
+            <form on:submit|preventDefault={handleSubmit}>
+                <input type="text" bind:value={inputValue} />
                 <button class="submit-button">Add</button>
             </form>
         </div>
