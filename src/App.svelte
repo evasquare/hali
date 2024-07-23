@@ -17,6 +17,8 @@
             currentTarget: EventTarget & HTMLFormElement;
         }
     ) => {
+        if (inputValue === '' || inputValue.split(' ').join('').length < 1) return;
+
         await todoListPromiseStore.update(async (originalTodoListPromise) => {
             const newTodoList = await originalTodoListPromise;
 
