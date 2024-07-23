@@ -156,7 +156,7 @@
         font-weight: 500;
         border-radius: 7px;
 
-        transition: all 0.16s ease-in-out;
+        transition: all 0.16s ease-out;
         transform: none;
     }
     .submit-button:hover {
