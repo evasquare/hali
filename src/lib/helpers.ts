@@ -49,3 +49,8 @@ export const saveTodoList = async (todoListPromise: Promise<Todo[]>): Promise<vo
         dir: BaseDirectory.AppData,
     });
 };
+
+/** @example
+ * await delay(5000);
+ */
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));

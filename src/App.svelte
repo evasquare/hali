@@ -1,7 +1,7 @@
 <script lang="ts">
     import CheckBox from './lib/CheckBox.svelte';
     import TopSection from './lib/TopSection.svelte';
-    import { saveTodoList } from './lib/helpers';
+    import { delay, saveTodoList } from './lib/helpers';
     import { todoListPromiseStore } from './lib/store';
     import type { Todo } from './types';
 
@@ -10,6 +10,13 @@
         todoListPromise = newTodoListPromise;
         saveTodoList(newTodoListPromise);
     });
+
+    let submitButtonClass = 'submit-button';
+    const playButtonAnimation = async () => {
+        submitButtonClass = 'submit-button active-button';
+        await delay(160);
+        submitButtonClass = 'submit-button';
+    };
 
     let inputValue: string;
     const handleSubmit = async (
@@ -20,8 +27,8 @@
         if (inputValue === '' || inputValue.split(' ').join('').length < 1) return;
 
         await todoListPromiseStore.update(async (originalTodoListPromise) => {
+            playButtonAnimation();
             const newTodoList = await originalTodoListPromise;
-
             newTodoList.push({
                 id: String(Date.now()),
                 finished: false,
@@ -55,7 +62,7 @@
         <div class="column-section-2">
             <form on:submit|preventDefault={handleSubmit}>
                 <input type="text" bind:value={inputValue} />
-                <button class="submit-button">Add</button>
+                <button class={submitButtonClass}>Add</button>
             </form>
         </div>
     </div>
@@ -68,7 +75,6 @@
 
     .dragging-region {
         height: 30px;
-
         position: absolute;
         z-index: 999;
         top: 0;
@@ -108,7 +114,61 @@
         align-items: center;
     }
 
-    .column-section-2 > form > .submit-button {
-        height: 20px;
+    .column-section-2 > form {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .column-section-2 > form > input {
+        all: unset;
+
+        width: 100%;
+        height: 28px;
+
+        padding: 2px 6px;
+        margin-right: 8px;
+
+        color: white;
+        background-color: rgb(111, 111, 111);
+        font-size: small;
+        font-weight: 500;
+        border-radius: 7px;
+
+        @media (prefers-color-scheme: dark) {
+            background-color: #ffffff;
+            color: rgb(61, 61, 61);
+        }
+    }
+
+    .submit-button {
+        padding: 0;
+        background: none;
+        border: none;
+
+        height: 32px;
+        padding: 7.5px 15px;
+
+        color: white;
+        background-color: cornflowerblue;
+        font-weight: 500;
+        border-radius: 7px;
+
+        transition: all 0.16s ease-in-out;
+        transform: none;
+    }
+    .submit-button:hover {
+        color: white;
+        background-color: rgb(141, 180, 252);
+    }
+    .submit-button:active {
+        transform: scale(1.2, 1.2);
+    }
+
+    .active-button {
+        transform: scale(1.2, 1.2);
+        background-color: rgb(141, 180, 252);
     }
 </style>
