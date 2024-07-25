@@ -1,0 +1,103 @@
+<script lang="ts">
+    import { delay } from './helpers';
+    import { todoListPromiseStore } from './store';
+
+    let submitButtonClass = 'submit-button';
+    const playButtonAnimation = async () => {
+        submitButtonClass = 'submit-button active-button';
+        await delay(160);
+        submitButtonClass = 'submit-button';
+    };
+
+    let inputValue: string;
+    const submitForm = async (
+        e: SubmitEvent & {
+            currentTarget: EventTarget & HTMLFormElement;
+        }
+    ) => {
+        if (inputValue === '' || inputValue.split(' ').join('').length < 1) return;
+
+        await todoListPromiseStore.update(async (originalTodoListPromise) => {
+            playButtonAnimation();
+            const newTodoList = await originalTodoListPromise;
+            newTodoList.push({
+                id: String(Date.now()),
+                finished: false,
+                text: inputValue
+            });
+
+            return newTodoList;
+        });
+
+        inputValue = '';
+    };
+</script>
+
+<form on:submit|preventDefault={submitForm}>
+    <input type="text" placeholder="Add something here..." bind:value={inputValue} />
+    <button class={submitButtonClass}>Add</button>
+</form>
+
+<style>
+    form {
+        user-select: none;
+        -webkit-user-select: none;
+
+        z-index: 10;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    form > input {
+        all: unset;
+
+        width: 100%;
+        height: 28px;
+
+        padding: 2px 6px;
+        margin-right: 8px;
+
+        color: white;
+        background-color: rgb(111, 111, 111);
+        font-size: small;
+        font-weight: 500;
+        border-radius: 7px;
+
+        @media (prefers-color-scheme: dark) {
+            background-color: #ffffff;
+            color: rgb(61, 61, 61);
+        }
+    }
+
+    .submit-button {
+        padding: 0;
+        background: none;
+        border: none;
+
+        height: 32px;
+        padding: 7.5px 15px;
+
+        color: white;
+        background-color: cornflowerblue;
+        font-weight: 500;
+        border-radius: 7px;
+
+        transition: all 0.16s ease-out;
+        transform: none;
+    }
+    .submit-button:hover {
+        color: white;
+        background-color: rgb(141, 180, 252);
+    }
+    .submit-button:active {
+        transform: scale(1.2, 1.2);
+    }
+
+    .active-button {
+        transform: scale(1.2, 1.2);
+        background-color: rgb(141, 180, 252);
+    }
+</style>

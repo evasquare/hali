@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type { Todo } from '../types';
     import { todoListPromiseStore } from './store';
+    import type { Todo } from '../types';
 
     export let finished: boolean | null;
     export let labelName: string | null;
@@ -8,7 +8,7 @@
 
     $: checked = finished ?? false;
 
-    const handleCheckboxClick = (
+    const toggleCheckbox = (
         event: MouseEvent & {
             currentTarget: EventTarget & HTMLInputElement;
         }
@@ -26,7 +26,7 @@
         });
     };
 
-    const handleDelete = (
+    const deleteElement = (
         e: MouseEvent & {
             currentTarget: EventTarget & HTMLButtonElement;
         }
@@ -47,18 +47,41 @@
     };
 </script>
 
-<div class="checkbox-group no-user-select">
+<div class="checkbox-section no-user-select">
+    <!-- prettier-ignore -->
     {#if checked}
         <input
             type="checkbox"
             {id}
             name="scales"
             checked
-            on:click|preventDefault={handleCheckboxClick}
+            on:click|preventDefault={toggleCheckbox}
         />
     {:else}
-        <input type="checkbox" {id} name="scales" on:click|preventDefault={handleCheckboxClick} />
+        <input
+            type="checkbox"
+            {id}
+            name="scales"
+            on:click|preventDefault={toggleCheckbox} />
     {/if}
-    <button on:click={handleDelete}>X</button>
+
+    <button class="delete-button" on:click={deleteElement}>X</button>
     <label for={id}>{labelName}</label>
 </div>
+
+<style>
+    .checkbox-section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        column-gap: 5px;
+    }
+
+    .delete-button {
+        font-size: 11px;
+    }
+
+    label {
+        margin-left: 3px;
+    }
+</style>

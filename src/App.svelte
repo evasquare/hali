@@ -1,53 +1,26 @@
 <script lang="ts">
     import CheckBox from './lib/CheckBox.svelte';
+    import SubmitForm from './lib/SubmitForm.svelte';
     import TopSection from './lib/TopSection.svelte';
-    import { delay, saveTodoList } from './lib/helpers';
-    import { todoListPromiseStore } from './lib/store';
     import type { Todo } from './types';
+    import { saveTodoList } from './lib/helpers';
+    import { todoListPromiseStore } from './lib/store';
 
     let todoListPromise: Promise<Todo[]>;
     todoListPromiseStore.subscribe((newTodoListPromise) => {
         todoListPromise = newTodoListPromise;
         saveTodoList(newTodoListPromise);
     });
-
-    let submitButtonClass = 'submit-button';
-    const playButtonAnimation = async () => {
-        submitButtonClass = 'submit-button active-button';
-        await delay(160);
-        submitButtonClass = 'submit-button';
-    };
-
-    let inputValue: string;
-    const handleSubmit = async (
-        e: SubmitEvent & {
-            currentTarget: EventTarget & HTMLFormElement;
-        }
-    ) => {
-        if (inputValue === '' || inputValue.split(' ').join('').length < 1) return;
-
-        await todoListPromiseStore.update(async (originalTodoListPromise) => {
-            playButtonAnimation();
-            const newTodoList = await originalTodoListPromise;
-            newTodoList.push({
-                id: String(Date.now()),
-                finished: false,
-                text: inputValue
-            });
-
-            return newTodoList;
-        });
-
-        inputValue = '';
-    };
 </script>
 
 <div data-tauri-drag-region class="dragging-region" />
-<main class="safe-area y-padding">
-    <div class="column-flex">
-        <div class="column-section-1">
-            <TopSection />
+<main class="safe-area-wrapper y-padding">
+    <div class="top-fixed">
+        <TopSection />
+    </div>
 
+    <div class="column-flex-wrapper">
+        <div class="column-section">
             {#await todoListPromise}
                 <span>Loading todos...</span>
             {:then todoList}
@@ -58,12 +31,12 @@
                 <span>Error: {error}</span>
             {/await}
         </div>
+    </div>
 
-        <div class="column-section-2">
-            <form on:submit|preventDefault={handleSubmit}>
-                <input type="text" bind:value={inputValue} />
-                <button class={submitButtonClass}>Add</button>
-            </form>
+    <div class="bottom-fixed">
+        <SubmitForm />
+        <div class="absolute-wrapper">
+            <div class="hide" />
         </div>
     </div>
 </main>
@@ -75,38 +48,45 @@
 
     .dragging-region {
         height: 30px;
-        position: absolute;
+        position: fixed;
         z-index: 999;
         top: 0;
         left: 0;
         right: 0;
 
+        background-color: #f6f6f6;
+        @media (prefers-color-scheme: dark) {
+            background-color: #202020;
+        }
         user-select: none;
         -webkit-user-select: none;
     }
-    .safe-area {
+
+    .safe-area-wrapper {
         height: 100%;
-        margin-top: 30px;
+        margin-top: 35px;
     }
 
-    .safe-area > .column-flex {
-        width: 100%;
-        height: 100%;
+    .top-fixed {
+        position: fixed;
+        top: 30px;
+        left: 0;
+        right: 0;
+        padding: 0px 10px;
 
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        background-color: #f6f6f6;
+        @media (prefers-color-scheme: dark) {
+            background-color: #202020;
+        }
     }
-    .column-flex > .column-section-1 {
-        width: 100%;
+    .bottom-fixed {
+        position: fixed;
 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: start;
-    }
-    .column-flex > .column-section-2 {
         margin-bottom: 30px;
+        padding: 0px 10px;
+        right: 0;
+        left: 0;
+        bottom: 0;
 
         display: flex;
         flex-direction: row;
@@ -114,61 +94,44 @@
         align-items: center;
     }
 
-    .column-section-2 > form {
+    .safe-area-wrapper > .column-flex-wrapper {
         width: 100%;
+        height: 100%;
+        margin-top: 30px;
+
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
-        align-items: center;
     }
-
-    .column-section-2 > form > input {
-        all: unset;
-
+    .column-flex-wrapper > .column-section {
         width: 100%;
-        height: 28px;
 
-        padding: 2px 6px;
-        margin-right: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: start;
+        padding-top: 101px;
+        padding-bottom: 87px;
+    }
 
-        color: white;
-        background-color: rgb(111, 111, 111);
-        font-size: small;
-        font-weight: 500;
-        border-radius: 7px;
+    .bottom-fixed > .absolute-wrapper {
+        position: absolute;
+    }
+    .absolute-wrapper > .hide {
+        z-index: 5;
 
+        overflow-y: hidden;
+
+        position: fixed;
+        right: 0;
+        left: 0;
+        bottom: 0;
+
+        padding: 42px 0px;
+
+        background-color: #f6f6f6;
         @media (prefers-color-scheme: dark) {
-            background-color: #ffffff;
-            color: rgb(61, 61, 61);
+            background-color: #202020;
         }
-    }
-
-    .submit-button {
-        padding: 0;
-        background: none;
-        border: none;
-
-        height: 32px;
-        padding: 7.5px 15px;
-
-        color: white;
-        background-color: cornflowerblue;
-        font-weight: 500;
-        border-radius: 7px;
-
-        transition: all 0.16s ease-out;
-        transform: none;
-    }
-    .submit-button:hover {
-        color: white;
-        background-color: rgb(141, 180, 252);
-    }
-    .submit-button:active {
-        transform: scale(1.2, 1.2);
-    }
-
-    .active-button {
-        transform: scale(1.2, 1.2);
-        background-color: rgb(141, 180, 252);
     }
 </style>
