@@ -8,6 +8,8 @@
 {:then platform}
     {#if platform == 'darwin'}
         <div data-tauri-drag-region class="dragging-region" />
+    {:else}
+        <div class="dragging-region" />
     {/if}
 {/await}
 

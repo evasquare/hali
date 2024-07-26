@@ -1,18 +1,35 @@
 <script lang="ts">
+    import { platform } from '@tauri-apps/api/os';
+
     import CheckBox from './lib/CheckBox.svelte';
+    import DraggingRegion from './lib/DraggingRegion.svelte';
+    import { saveTodoList } from './lib/helpers';
+    import PreventOverscroll from './lib/PreventOverscroll.svelte';
+    import { todoListPromiseStore } from './lib/store';
     import SubmitForm from './lib/SubmitForm.svelte';
     import TopSection from './lib/TopSection.svelte';
+
     import type { Todo } from './types';
-    import { saveTodoList } from './lib/helpers';
-    import { todoListPromiseStore } from './lib/store';
-    import DraggingRegion from './lib/DraggingRegion.svelte';
-    import PreventOverscroll from './lib/PreventOverscroll.svelte';
 
     let todoListPromise: Promise<Todo[]>;
     todoListPromiseStore.subscribe((newTodoListPromise) => {
         todoListPromise = newTodoListPromise;
         saveTodoList(newTodoListPromise);
     });
+
+    let draggingRegionHeight = 15;
+    $: {
+        let platformPromise = platform();
+        platformPromise.then((platform) => {
+            if (platform == 'darwin') {
+                draggingRegionHeight = 30;
+            }
+            document.body.style.setProperty(
+                '--dragging-region-height',
+                `${draggingRegionHeight}px`
+            );
+        });
+    }
 </script>
 
 <PreventOverscroll />
@@ -57,7 +74,7 @@
 
     .top-fixed {
         position: fixed;
-        top: 30px;
+        top: var(--dragging-region-height);
         left: 0;
         right: 0;
         padding: 0px 10px;
@@ -70,7 +87,7 @@
     .bottom-fixed {
         position: fixed;
 
-        margin-bottom: 30px;
+        margin-bottom: var(--dragging-region-height);
         padding: 0px 10px;
         right: 0;
         left: 0;
@@ -85,7 +102,7 @@
     .safe-area-wrapper > .column-flex-wrapper {
         width: 100%;
         height: 100%;
-        margin-top: 30px;
+        margin-top: var(--dragging-region-height);
 
         display: flex;
         flex-direction: column;
@@ -98,7 +115,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: start;
-        padding-top: 101px;
+        padding-top: calc(var(--dragging-region-height) + 69px);
         padding-bottom: 87px;
     }
 
@@ -115,7 +132,7 @@
         left: 0;
         bottom: 0;
 
-        padding: 41px 0px;
+        padding: calc(var(--dragging-region-height) + 50px) 0px 0px 0px;
 
         background-color: #f6f6f6;
         @media (prefers-color-scheme: dark) {

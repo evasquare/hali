@@ -1,6 +1,7 @@
 <script lang="ts">
     let x: number;
     let y: number;
+
     $: {
         const documentHeight = document.body.scrollHeight;
         const windowHeight = window.innerHeight;
