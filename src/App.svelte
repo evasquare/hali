@@ -5,6 +5,7 @@
     import type { Todo } from './types';
     import { saveTodoList } from './lib/helpers';
     import { todoListPromiseStore } from './lib/store';
+    import DraggingRegion from './lib/DraggingRegion.svelte';
 
     let todoListPromise: Promise<Todo[]>;
     todoListPromiseStore.subscribe((newTodoListPromise) => {
@@ -13,7 +14,7 @@
     });
 </script>
 
-<div data-tauri-drag-region class="dragging-region" />
+<DraggingRegion />
 <main class="safe-area-wrapper y-padding">
     <div class="top-fixed">
         <TopSection />
@@ -44,22 +45,6 @@
 <style>
     .y-padding {
         padding: 0px 10px;
-    }
-
-    .dragging-region {
-        height: 30px;
-        position: fixed;
-        z-index: 999;
-        top: 0;
-        left: 0;
-        right: 0;
-
-        background-color: #f6f6f6;
-        @media (prefers-color-scheme: dark) {
-            background-color: #202020;
-        }
-        user-select: none;
-        -webkit-user-select: none;
     }
 
     .safe-area-wrapper {
@@ -127,7 +112,7 @@
         left: 0;
         bottom: 0;
 
-        padding: 42px 0px;
+        padding: 41px 0px;
 
         background-color: #f6f6f6;
         @media (prefers-color-scheme: dark) {
