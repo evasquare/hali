@@ -6,6 +6,7 @@
     import { saveTodoList } from './lib/helpers';
     import { todoListPromiseStore } from './lib/store';
     import DraggingRegion from './lib/DraggingRegion.svelte';
+    import PreventOverscroll from './lib/PreventOverscroll.svelte';
 
     let todoListPromise: Promise<Todo[]>;
     todoListPromiseStore.subscribe((newTodoListPromise) => {
@@ -14,7 +15,9 @@
     });
 </script>
 
+<PreventOverscroll />
 <DraggingRegion />
+
 <main class="safe-area-wrapper y-padding">
     <div class="top-fixed">
         <TopSection />

@@ -21,8 +21,12 @@
 body {
     width: 100%;
     height: calc(100vh - 30px);
-
+    
     margin: 0;
+}
+
+html {
+    overscroll-behavior: none;
 }
 
 #app {
