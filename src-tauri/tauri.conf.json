@@ -61,7 +61,7 @@
         "resizable": true,
         "title": "Hali",
         "width": 400,
-        "height": 600,
+        "height": 400,
         "minWidth": 400,
         "maxWidth": 400,
         "minHeight": 500,
