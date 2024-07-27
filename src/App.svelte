@@ -39,7 +39,6 @@
 </script>
 
 <DraggingRegion />
-
 <main class="main">
     <div class="top-section">
         <TopSection />

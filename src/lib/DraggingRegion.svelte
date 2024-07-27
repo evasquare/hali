@@ -15,9 +15,11 @@
 
 <style>
     .dragging-region {
-        height: 30px;
-        position: fixed;
         z-index: 999;
+
+        height: 30px;
+
+        position: fixed;
         top: 0;
         left: 0;
         right: 0;
@@ -26,6 +28,7 @@
         @media (prefers-color-scheme: dark) {
             background-color: #202020;
         }
+
         user-select: none;
         -webkit-user-select: none;
     }

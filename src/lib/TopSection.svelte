@@ -33,7 +33,6 @@
 
         color: #0f0f0f;
         font-size: 100%;
-
         font-weight: 500;
 
         @media (prefers-color-scheme: dark) {
