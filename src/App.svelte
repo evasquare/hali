@@ -4,11 +4,18 @@
     import CheckBox from './lib/CheckBox.svelte';
     import DraggingRegion from './lib/DraggingRegion.svelte';
     import { saveTodoList } from './lib/helpers';
-    import { todoListPromiseStore } from './lib/store';
+    import { endOfTodosStore, todoListPromiseStore } from './lib/store';
     import SubmitForm from './lib/SubmitForm.svelte';
     import TopSection from './lib/TopSection.svelte';
 
     import type { Todo } from './types';
+
+    let endOfTodos: HTMLDivElement | null = null;
+    $: {
+        endOfTodosStore.update(() => {
+            return endOfTodos;
+        });
+    }
 
     let todoListPromise: Promise<Todo[]>;
     todoListPromiseStore.subscribe((newTodoListPromise) => {
@@ -49,6 +56,7 @@
             {:catch error}
                 <span>Error: {error}</span>
             {/await}
+            <div bind:this={endOfTodos} />
         </div>
     </div>
 

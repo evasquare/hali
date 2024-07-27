@@ -1,6 +1,6 @@
 <script lang="ts">
     import { delay } from './helpers';
-    import { todoListPromiseStore } from './store';
+    import { todoListPromiseStore, endOfTodosStore } from './store';
 
     let submitButtonClass = 'submit-button';
     const playButtonAnimation = async () => {
@@ -9,13 +9,26 @@
         submitButtonClass = 'submit-button';
     };
 
+    let endOfTodos: HTMLDivElement | null;
+    endOfTodosStore.subscribe((value) => {
+        endOfTodos = value;
+    });
+
     let inputValue: string;
+    const scrollToEnd = async (endOfTodos: HTMLDivElement) => {
+        await delay(50);
+        endOfTodos.scrollIntoView();
+    };
     const submitForm = async (
         e: SubmitEvent & {
             currentTarget: EventTarget & HTMLFormElement;
         }
     ) => {
         if (inputValue === '' || inputValue.split(' ').join('').length < 1) return;
+
+        if (endOfTodos !== null) {
+            scrollToEnd(endOfTodos);
+        }
 
         await todoListPromiseStore.update(async (originalTodoListPromise) => {
             playButtonAnimation();
@@ -28,7 +41,6 @@
 
             return newTodoList;
         });
-
         inputValue = '';
     };
 </script>
