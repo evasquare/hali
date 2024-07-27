@@ -4,7 +4,6 @@
     import CheckBox from './lib/CheckBox.svelte';
     import DraggingRegion from './lib/DraggingRegion.svelte';
     import { saveTodoList } from './lib/helpers';
-    import PreventOverscroll from './lib/PreventOverscroll.svelte';
     import { todoListPromiseStore } from './lib/store';
     import SubmitForm from './lib/SubmitForm.svelte';
     import TopSection from './lib/TopSection.svelte';
@@ -32,15 +31,14 @@
     }
 </script>
 
-<PreventOverscroll />
 <DraggingRegion />
 
-<main class="safe-area-wrapper y-padding">
-    <div class="top-fixed">
+<main class="main">
+    <div class="top-section">
         <TopSection />
     </div>
 
-    <div class="column-flex-wrapper">
+    <div class="column-section-wrapper">
         <div class="column-section">
             {#await todoListPromise}
                 <span>Loading todos...</span>
@@ -54,7 +52,7 @@
         </div>
     </div>
 
-    <div class="bottom-fixed">
+    <div class="bottom-section">
         <SubmitForm />
         <div class="absolute-wrapper">
             <div class="hide" />
@@ -63,80 +61,53 @@
 </main>
 
 <style>
-    .y-padding {
-        padding: 0px 10px;
-    }
-
-    .safe-area-wrapper {
+    .main {
         height: 100%;
-        margin-top: 35px;
-    }
 
-    .top-fixed {
-        position: fixed;
-        top: var(--dragging-region-height);
-        left: 0;
-        right: 0;
         padding: 0px 10px;
-
-        background-color: #f6f6f6;
-        @media (prefers-color-scheme: dark) {
-            background-color: #202020;
-        }
-    }
-    .bottom-fixed {
-        position: fixed;
-
-        margin-bottom: var(--dragging-region-height);
-        padding: 0px 10px;
-        right: 0;
-        left: 0;
-        bottom: 0;
-
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
-    .safe-area-wrapper > .column-flex-wrapper {
-        width: 100%;
-        height: 100%;
-        margin-top: var(--dragging-region-height);
 
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
-    .column-flex-wrapper > .column-section {
-        width: 100%;
 
+    .column-section-wrapper {
+        width: 100%;
+        height: 70%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    .column-section-wrapper > .column-section {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: start;
-        padding-top: calc(var(--dragging-region-height) + 69px);
-        padding-bottom: 87px;
     }
 
-    .bottom-fixed > .absolute-wrapper {
-        position: absolute;
-    }
-    .absolute-wrapper > .hide {
-        z-index: 5;
-
-        overflow-y: hidden;
-
-        position: fixed;
-        right: 0;
-        left: 0;
-        bottom: 0;
-
-        padding: calc(var(--dragging-region-height) + 50px) 0px 0px 0px;
+    .top-section {
+        margin-top: var(--dragging-region-height);
 
         background-color: #f6f6f6;
         @media (prefers-color-scheme: dark) {
             background-color: #202020;
         }
+    }
+    .bottom-section {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        background-color: #f6f6f6;
+        @media (prefers-color-scheme: dark) {
+            background-color: #202020;
+        }
+
+        margin-top: calc(var(--dragging-region-height) - calc(var(--dragging-region-height)) / 2);
     }
 </style>
