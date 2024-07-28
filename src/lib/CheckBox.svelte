@@ -78,10 +78,42 @@
     }
 
     .delete-button {
-        font-size: 11px;
+        padding: 0;
+
+        background: none;
+        border: none;
+
+        width: 18px;
+        height: 18px;
+        color: rgb(225, 225, 225);
+        background-color: gray;
+        font-size: 10px;
+        font-weight: 700;
+        border-radius: 5px;
+
+        transition: all 0.16s ease-out;
+        transform: none;
+    }
+
+    .delete-button:hover {
+        color: white;
+        background-color: tomato;
+    }
+    .delete-button:active {
+        transform: scale(1.2, 1.2);
     }
 
     label {
         margin-left: 3px;
+        transition: all 0.16s ease-out;
+    }
+
+    label:hover {
+        color: rgb(162, 162, 162);
+    }
+    @media (prefers-color-scheme: dark) {
+        label:hover {
+            color: gray;
+        }
     }
 </style>

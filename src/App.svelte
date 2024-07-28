@@ -90,6 +90,7 @@
         overflow-x: hidden;
     }
     .column-section-wrapper > .column-section {
+        padding: 2px 0px;
         display: flex;
         flex-direction: column;
         justify-content: center;

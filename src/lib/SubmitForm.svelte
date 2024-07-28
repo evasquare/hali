@@ -46,7 +46,13 @@
 </script>
 
 <form on:submit|preventDefault={submitForm}>
-    <input type="text" placeholder="Add something here..." bind:value={inputValue} />
+    <input
+        type="text"
+        class="text-input"
+        placeholder="Add something here..."
+        maxlength="43"
+        bind:value={inputValue}
+    />
     <button class={submitButtonClass}>Add</button>
 </form>
 
@@ -65,7 +71,7 @@
         align-items: center;
     }
 
-    form > input {
+    form > .text-input {
         all: unset;
 
         width: 100%;
@@ -82,6 +88,15 @@
 
         @media (prefers-color-scheme: dark) {
             background-color: #ffffff;
+            color: rgb(61, 61, 61);
+        }
+    }
+
+    form > .text-input::placeholder {
+        color: rgb(225, 225, 225);
+    }
+    @media (prefers-color-scheme: dark) {
+        form > .text-input::placeholder {
             color: rgb(61, 61, 61);
         }
     }
