@@ -88,6 +88,7 @@
 
         overflow: scroll;
         overflow-x: hidden;
+        color-scheme: dark;
     }
     .column-section-wrapper > .column-section {
         padding: 2px 0px;
