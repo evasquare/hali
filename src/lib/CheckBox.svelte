@@ -47,44 +47,71 @@
     };
 </script>
 
-<div class="checkbox-section no-user-select">
-    <!-- prettier-ignore -->
-    {#if checked}
-        <input
-            type="checkbox"
-            {id}
-            name="scales"
-            checked
-            on:click|preventDefault={toggleCheckbox}
-        />
-    {:else}
-        <input
-            type="checkbox"
-            {id}
-            name="scales"
-            on:click|preventDefault={toggleCheckbox} />
-    {/if}
+<div class="checkbox-section no-user-select center">
+    <div class="checkbox-wrapper">
+        {#if checked}
+            <!-- prettier-ignore -->
+            <input
+                class="checkbox"
+                type="checkbox"
+                {id}
+                name="scales"
+                checked
+                on:click|preventDefault={toggleCheckbox}
+            />
+            <div class="pseudo-checkbox blue-background">
+                <div class="circle" />
+            </div>
+        {:else}
+            <!-- prettier-ignore -->
+            <input
+                class="checkbox"
+                type="checkbox"
+                {id}
+                name="scales"
+                on:click|preventDefault={toggleCheckbox}
+            />
+            <div class="pseudo-checkbox gray-background" />
+        {/if}
+    </div>
 
     <button class="delete-button" on:click={deleteElement}>X</button>
     <label for={id}>{labelName}</label>
 </div>
 
 <style>
+    .center {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    .gray-background {
+        background-color: rgb(177, 177, 177);
+        @media (prefers-color-scheme: dark) {
+            background-color: rgb(95, 95, 95);
+        }
+    }
+    .blue-background {
+        background-color: cornflowerblue;
+    }
+
     .checkbox-section {
         display: flex;
         flex-direction: row;
         align-items: center;
+
         column-gap: 5px;
     }
 
     .delete-button {
-        padding: 0;
-
-        background: none;
         border: none;
+        background: none;
 
         width: 18px;
         height: 18px;
+
+        padding: 0;
+
         color: rgb(225, 225, 225);
         background-color: gray;
         font-size: 10px;
@@ -94,7 +121,6 @@
         transition: all 0.16s ease-out;
         transform: none;
     }
-
     .delete-button:hover {
         color: white;
         background-color: tomato;
@@ -103,11 +129,53 @@
         transform: scale(1.2, 1.2);
     }
 
+    .checkbox-wrapper {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .checkbox-wrapper > .pseudo-checkbox {
+        z-index: -50;
+
+        width: 15px;
+        height: 15px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-radius: 50px;
+    }
+    .pseudo-checkbox > .circle {
+        width: 6px;
+        height: 6px;
+
+        background-color: #f6f6f6;
+        @media (prefers-color-scheme: dark) {
+            background-color: #202020;
+        }
+        border-radius: 50px;
+    }
+    .checkbox-wrapper > .checkbox {
+        z-index: 30;
+
+        width: 16px;
+        height: 16px;
+
+        position: absolute;
+        top: 100;
+        bottom: 100;
+        left: 100;
+        right: 100;
+
+        opacity: 0;
+    }
+
     label {
         margin-left: 3px;
         transition: all 0.16s ease-out;
     }
-
     label:hover {
         color: rgb(162, 162, 162);
     }
