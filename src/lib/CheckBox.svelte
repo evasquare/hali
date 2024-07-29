@@ -138,8 +138,8 @@
     .checkbox-wrapper > .pseudo-checkbox {
         z-index: -50;
 
-        width: 15px;
-        height: 15px;
+        width: 16px;
+        height: 16px;
 
         display: flex;
         justify-content: center;
