@@ -34,7 +34,6 @@
             playButtonAnimation();
             const newTodoList = await originalTodoListPromise;
             newTodoList.push({
-                id: String(Date.now()),
                 finished: false,
                 text: inputValue
             });

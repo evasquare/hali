@@ -49,8 +49,12 @@
             {#await todoListPromise}
                 <span>Loading todos...</span>
             {:then todoList}
-                {#each todoList as todo}
-                    <CheckBox id={todo.id} finished={todo.finished} labelName={todo.text} />
+                {#each todoList as todo, index}
+                    <CheckBox
+                        id={index.toString()}
+                        finished={todo.finished}
+                        labelName={todo.text}
+                    />
                 {/each}
             {:catch error}
                 <span>Error: {error}</span>
