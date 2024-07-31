@@ -57,7 +57,7 @@
                     />
                 {/each}
             {:catch error}
-                <span>Error: {error}</span>
+                <span>{error}</span>
             {/await}
             <div bind:this={endOfTodos} />
         </div>
