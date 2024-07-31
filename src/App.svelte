@@ -3,7 +3,7 @@
 
     import CheckBox from './lib/CheckBox.svelte';
     import DraggingRegion from './lib/DraggingRegion.svelte';
-    import { saveTodoList } from './lib/helpers';
+    import { saveTodoListFromHali } from './lib/helpers';
     import { endOfTodosStore, todoListPromiseStore } from './lib/store';
     import SubmitForm from './lib/SubmitForm.svelte';
     import TopSection from './lib/TopSection.svelte';
@@ -20,7 +20,7 @@
     let todoListPromise: Promise<Todo[]>;
     todoListPromiseStore.subscribe((newTodoListPromise) => {
         todoListPromise = newTodoListPromise;
-        saveTodoList(newTodoListPromise);
+        saveTodoListFromHali(newTodoListPromise);
     });
 
     let draggingRegionHeight = 15;

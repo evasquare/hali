@@ -49,7 +49,7 @@ struct ParseResult {
     todos: Vec<Todo>,
 }
 
-#[tauri::command]
+#[tauri::command(rename_all = "snake_case")]
 fn parse_hali_format(input: &str) -> ParseResult {
     let mut result_todos: Vec<Todo> = vec![];
 
@@ -75,9 +75,31 @@ fn parse_hali_format(input: &str) -> ParseResult {
     }
 }
 
+#[tauri::command]
+fn stringify_hali_format(input: Vec<Todo>) -> String {
+    let mut output = String::new();
+
+    for (index, item) in input.iter().enumerate() {
+        if index != 0 {
+            output.push('\n')
+        }
+
+        if !item.finished {
+            output.push_str(&format!("- [] {}", item.text));
+        } else if item.finished {
+            output.push_str(&format!("- [x] {}", item.text));
+        }
+    }
+
+    output
+}
+
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![parse_hali_format])
+        .invoke_handler(tauri::generate_handler![
+            parse_hali_format,
+            stringify_hali_format
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
