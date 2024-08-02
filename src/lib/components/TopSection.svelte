@@ -10,7 +10,7 @@
         <h1 class="title text-left">{title}</h1>
         <div>
             {#each buttons as button}
-                <a href={button.url}>{button.text}</a>
+                <a class="button" href={button.url}>{button.text}</a>
             {/each}
         </div>
     </div>
@@ -34,7 +34,18 @@
     }
 
     a {
-        color: rgb(97, 97, 97);
+        color: rgb(145, 145, 145);
+        @media (prefers-color-scheme: dark) {
+            color: rgb(97, 97, 97);
+        }
         text-decoration: none;
+        transition: all 0.1s ease-out;
+    }
+
+    a:hover {
+        color: rgb(97, 97, 97);
+        @media (prefers-color-scheme: dark) {
+            color: rgb(145, 145, 145);
+        }
     }
 </style>
