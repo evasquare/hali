@@ -95,7 +95,7 @@
         height: 100%;
 
         position: relative;
-        margin-top: 30px;
+        margin-top: var(--dragging-region-height);
     }
 
     .transition-block {
@@ -117,7 +117,7 @@
 
     .column-section-wrapper {
         width: 100%;
-        height: 70%;
+        height: 100%;
 
         display: flex;
         flex-direction: column;
