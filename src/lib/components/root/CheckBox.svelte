@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { todoListPromiseStore } from './store';
-    import type { Todo } from '../types';
+    import { todoListPromiseStore } from '../../others/store';
+    import type { Todo } from '../../others/types';
 
     export let finished: boolean | null;
     export let labelName: string | null;

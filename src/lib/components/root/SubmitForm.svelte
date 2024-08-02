@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { delay } from './helpers';
-    import { todoListPromiseStore, endOfTodosStore } from './store';
+    import { delay } from '../../others/helpers';
+    import { todoListPromiseStore, endOfTodosStore } from '../../others/store';
 
     let submitButtonClass = 'submit-button';
     const playButtonAnimation = async () => {

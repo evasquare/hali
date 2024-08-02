@@ -8,7 +8,7 @@ import {
 } from "@tauri-apps/api/fs";
 import { homeDir } from "@tauri-apps/api/path";
 
-import type { ParseResult, Todo } from "../types";
+import type { ParseResult, Todo } from "./types";
 export const getHomeDir = async () => {
     return await homeDir();
 };

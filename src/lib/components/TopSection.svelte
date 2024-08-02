@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Button } from '../types';
+    import type { Button } from '../others/types';
 
     export let buttons: Button[];
     export let title: string | null;
