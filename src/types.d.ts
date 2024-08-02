@@ -8,3 +8,8 @@ export interface ParseResult {
     error_message: string | null,
     todos: Todo[]
 }
+
+export interface Button {
+    text: string,
+    url: string,
+}

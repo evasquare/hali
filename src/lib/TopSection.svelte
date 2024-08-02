@@ -1,42 +1,40 @@
 <script lang="ts">
-    let text = '';
+    import type { Button } from '../types';
+
+    export let buttons: Button[];
+    export let title: string | null;
 </script>
 
 <div class="top-section no-user-select">
-    <h1 class="title text-left">TODOs</h1>
-    <input
-        type="text"
-        placeholder="So uh... what was I going to do again?"
-        class="message-input"
-        value={text}
-    />
+    <div class="flex-row">
+        <h1 class="title text-left">{title}</h1>
+        <div>
+            {#each buttons as button}
+                <a href={button.url}>{button.text}</a>
+            {/each}
+        </div>
+    </div>
 </div>
 
 <style>
     .top-section {
         width: 100%;
     }
-    .top-section > .text-left {
+    .top-section > .flex-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .flex-row > .text-left {
         text-align: left;
     }
-    .top-section > .title {
+    .flex-row > .title {
         margin-bottom: 15px;
     }
 
-    .message-input {
-        all: unset;
-
-        width: 100%;
-
-        padding: 0 0;
-        margin-bottom: 20px;
-
-        color: #0f0f0f;
-        font-size: 100%;
-        font-weight: 500;
-
-        @media (prefers-color-scheme: dark) {
-            color: white;
-        }
+    a {
+        color: rgb(97, 97, 97);
+        text-decoration: none;
     }
 </style>

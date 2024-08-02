@@ -1,6 +1,9 @@
 <script lang="ts">
     import { platform } from '@tauri-apps/api/os';
 
+    import { Route } from '../node_modules/tinro';
+    import { fly } from 'svelte/transition';
+
     import CheckBox from './lib/CheckBox.svelte';
     import DraggingRegion from './lib/DraggingRegion.svelte';
     import { saveTodoListFromHali } from './lib/helpers';
@@ -39,43 +42,73 @@
 </script>
 
 <DraggingRegion />
-<main class="main">
-    <div class="top-section">
-        <TopSection />
-    </div>
-
-    <div class="column-section-wrapper">
-        <div class="column-section">
-            {#await todoListPromise}
-                <span>Loading todos...</span>
-            {:then todoList}
-                {#each todoList as todo, index}
-                    <CheckBox
-                        id={index.toString()}
-                        finished={todo.finished}
-                        labelName={todo.text}
+<main>
+    <Route class="route" path="/" let:meta>
+        <div class="transition-block" in:fly={{ x: 400 }} out:fly={{ x: -400 }}>
+            <div class="page-wrapper">
+                <div class="top-section-wrapper">
+                    <TopSection
+                        title="Todos "
+                        buttons={[{ text: 'Settings →', url: '/settings' }]}
                     />
-                {/each}
-            {:catch error}
-                <span>{error}</span>
-            {/await}
-            <div bind:this={endOfTodos} />
-        </div>
-    </div>
+                </div>
 
-    <div class="bottom-section">
-        <SubmitForm />
-        <div class="absolute-wrapper">
-            <div class="hide" />
+                <div class="column-section-wrapper">
+                    <div class="column-section">
+                        {#await todoListPromise}
+                            <span>Loading todos...</span>
+                        {:then todoList}
+                            {#each todoList as todo, index}
+                                <CheckBox
+                                    id={index.toString()}
+                                    finished={todo.finished}
+                                    labelName={todo.text}
+                                />
+                            {/each}
+                        {:catch error}
+                            <span>{error}</span>
+                        {/await}
+                        <div bind:this={endOfTodos} />
+                    </div>
+                </div>
+
+                <div class="bottom-section">
+                    <SubmitForm />
+                    <div class="absolute-wrapper">
+                        <div class="hide" />
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </Route>
+    <Route path="/:page" let:meta>
+        <div class="transition-block" in:fly={{ x: 400 }} out:fly={{ x: -400 }}>
+            <div class="top-section-wrapper">
+                <TopSection title="Settings" buttons={[{ text: 'Close →', url: '/' }]} />
+            </div>
+        </div>
+    </Route>
 </main>
 
 <style>
-    .main {
+    main {
         height: 100%;
 
+        position: relative;
+        margin-top: 30px;
+    }
+
+    .transition-block {
         padding: 0px 10px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .page-wrapper {
+        height: 100%;
 
         display: flex;
         flex-direction: column;
@@ -102,15 +135,15 @@
         align-items: start;
     }
 
-    .top-section {
-        margin-top: var(--dragging-region-height);
-
+    .top-section-wrapper {
         background-color: #f6f6f6;
         @media (prefers-color-scheme: dark) {
             background-color: #202020;
         }
     }
     .bottom-section {
+        margin-bottom: var(--dragging-region-height);
+
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
