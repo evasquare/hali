@@ -3,6 +3,16 @@
     import DraggingRegion from './lib/components/root/DraggingRegion.svelte';
     import Root from './lib/components/root/Root.svelte';
     import Settings from './lib/components/settings/Settings.svelte';
+
+    function onKeyDown(
+        e: KeyboardEvent & {
+            currentTarget: EventTarget & Window;
+        }
+    ) {
+        if (e.key === 'Backspace') {
+            e.preventDefault();
+        }
+    }
 </script>
 
 <DraggingRegion />
@@ -14,6 +24,8 @@
         <Settings />
     </Route>
 </main>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <style>
     main {
