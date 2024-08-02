@@ -1,5 +1,7 @@
 mod parse_hali_format {
+    #[allow(unused_imports)]
     use super::super::parse_hali_format;
+    #[allow(unused_imports)]
     use crate::{ParseResult, Todo};
 
     #[test]
