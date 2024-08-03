@@ -9,7 +9,7 @@
             currentTarget: EventTarget & Window;
         }
     ) {
-        if (e.key === 'Backspace') {
+        if (e.key === 'Backspace' && !(e.target instanceof HTMLInputElement)) {
             e.preventDefault();
         }
     }
