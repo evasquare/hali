@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { delay } from '../../others/helpers';
-    import { todoListPromiseStore, endOfTodosStore } from '../../others/store';
+    import { delay } from "../../others/helpers";
+    import { todoListPromiseStore, endOfTodosStore } from "../../others/store";
 
-    let submitButtonClass = 'submit-button';
+    let submitButtonClass = "submit-button";
     const playButtonAnimation = async () => {
-        submitButtonClass = 'submit-button active-button';
+        submitButtonClass = "submit-button active-button";
         await delay(160);
-        submitButtonClass = 'submit-button';
+        submitButtonClass = "submit-button";
     };
 
     let endOfTodos: HTMLDivElement | null;
@@ -24,7 +24,8 @@
             currentTarget: EventTarget & HTMLFormElement;
         }
     ) => {
-        if (inputValue === '' || inputValue.split(' ').join('').length < 1) return;
+        if (inputValue === "" || inputValue.split(" ").join("").length < 1)
+            return;
 
         if (endOfTodos !== null) {
             scrollToEnd(endOfTodos);
@@ -35,12 +36,12 @@
             const newTodoList = await originalTodoListPromise;
             newTodoList.push({
                 finished: false,
-                text: inputValue
+                text: inputValue,
             });
 
             return newTodoList;
         });
-        inputValue = '';
+        inputValue = "";
     };
 </script>
 

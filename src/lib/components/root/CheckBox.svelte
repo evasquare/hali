@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { todoListPromiseStore } from '../../others/store';
-    import type { Todo } from '../../others/types';
+    import { todoListPromiseStore } from "../../others/store";
+    import type { Todo } from "../../others/types";
 
-    export let finished: boolean | null;
-    export let labelName: string | null;
-    export let id: string | null;
+    export let finished: boolean;
+    export let labelName: string;
+    export let id: string;
 
     $: checked = finished ?? false;
 

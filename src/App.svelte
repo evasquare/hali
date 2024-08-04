@@ -1,15 +1,15 @@
 <script lang="ts">
-    import { Route } from 'tinro';
-    import DraggingRegion from './lib/components/root/DraggingRegion.svelte';
-    import Root from './lib/components/root/Root.svelte';
-    import Settings from './lib/components/settings/Settings.svelte';
+    import { Route } from "tinro";
+    import DraggingRegion from "./lib/components/root/DraggingRegion.svelte";
+    import Root from "./lib/components/root/Root.svelte";
+    import Settings from "./lib/components/settings/Settings.svelte";
 
     function onKeyDown(
         e: KeyboardEvent & {
             currentTarget: EventTarget & Window;
         }
     ) {
-        if (e.key === 'Backspace' && !(e.target instanceof HTMLInputElement)) {
+        if (e.key === "Backspace" && !(e.target instanceof HTMLInputElement)) {
             e.preventDefault();
         }
     }
