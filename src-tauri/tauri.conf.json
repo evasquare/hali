@@ -13,29 +13,85 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "process": {
+        "all": false,
+        "exit": false,
+        "relaunch": true,
+        "relaunchDangerousAllowSymlinkMacos": false
+      },
       "os": {
         "all": true
       },
       "shell": {
         "all": false,
-        "open": true
+        "execute": false,
+        "open": true,
+        "scope": [],
+        "sidecar": false
       },
       "window": {
+        "all": false,
+        "center": false,
+        "close": false,
+        "create": false,
+        "hide": false,
+        "maximize": false,
+        "minimize": false,
+        "print": false,
+        "requestUserAttention": false,
+        "setAlwaysOnTop": false,
+        "setClosable": false,
+        "setContentProtected": false,
+        "setCursorGrab": false,
+        "setCursorIcon": false,
+        "setCursorPosition": false,
+        "setCursorVisible": false,
+        "setDecorations": false,
+        "setFocus": false,
+        "setFullscreen": false,
+        "setIcon": false,
+        "setIgnoreCursorEvents": false,
+        "setMaxSize": false,
+        "setMaximizable": false,
+        "setMinSize": false,
+        "setMinimizable": false,
+        "setPosition": false,
+        "setResizable": false,
+        "setSize": false,
+        "setSkipTaskbar": false,
+        "setTitle": false,
+        "show": false,
         "startDragging": true,
-        "setFullscreen": false
+        "unmaximize": false,
+        "unminimize": false
       },
       "fs": {
-        "scope": [
-          "$APPDATA/*"
-        ],
-        "exists": true,
-        "readFile": true,
-        "writeFile": true,
+        "all": false,
+        "copyFile": false,
         "createDir": true,
-        "readDir": true
+        "exists": true,
+        "readDir": true,
+        "readFile": true,
+        "removeDir": false,
+        "removeFile": false,
+        "renameFile": false,
+        "scope": [
+          "**",
+          "**/*",
+          "/**/*"
+        ],
+        "writeFile": true
       },
       "path": {
         "all": true
+      },
+      "dialog": {
+        "all": true,
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": true,
+        "save": false
       }
     },
     "bundle": {

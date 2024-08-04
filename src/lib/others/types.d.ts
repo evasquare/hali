@@ -4,12 +4,16 @@ export interface Todo {
 }
 
 export interface ParseResult {
-    successful: boolean,
-    error_message: string | null,
-    todos: Todo[]
+    successful: boolean;
+    error_message: string | null;
+    todos: Todo[];
 }
 
 export interface Button {
-    text: string,
-    url: string,
+    text: string;
+    url: string;
+}
+
+export interface Config {
+    haliPath: string | null;
 }

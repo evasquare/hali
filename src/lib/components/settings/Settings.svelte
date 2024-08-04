@@ -1,23 +1,85 @@
-<script>
-    import { fly } from 'svelte/transition';
-    import TopSection from '../TopSection.svelte';
+<script lang="ts">
+    import { open } from "@tauri-apps/api/dialog";
+    import { relaunch } from "@tauri-apps/api/process";
+    import { fly } from "svelte/transition";
+
+    import OptionDescription from "./OptionDescription.svelte";
+    import { getConfig, saveConfig } from "../../others/helpers";
+    import type { Config } from "../../others/types";
+    import TopSection from "../TopSection.svelte";
+
+    let config: Config;
+    let fileDir: string;
+    $: {
+        (async () => {
+            config = await getConfig();
+
+            if (config.haliPath === null) {
+                fileDir = "Default";
+            } else {
+                fileDir = config.haliPath;
+            }
+        })();
+    }
+
+    const changeDir = async (
+        e: MouseEvent & {
+            currentTarget: EventTarget & HTMLButtonElement;
+        }
+    ) => {
+        let input = document.createElement("input");
+        input.type = "file";
+
+        const filePath = await open({
+            filters: [
+                {
+                    name: "text",
+                    extensions: ["hali"],
+                },
+            ],
+        });
+        if (!filePath) return;
+
+        fileDir = String(filePath);
+        config.haliPath = String(filePath);
+        await saveConfig(config);
+        relaunch();
+    };
+
+    const resetDir = async (
+        e: MouseEvent & {
+            currentTarget: EventTarget & HTMLButtonElement;
+        }
+    ) => {
+        config.haliPath = null;
+        await saveConfig(config);
+        relaunch();
+    };
 </script>
 
 <div class="transition-block" in:fly={{ x: 400 }} out:fly={{ x: -400 }}>
     <div class="page-wrapper">
         <div class="top-section-wrapper">
-            <TopSection title="Settings" buttons={[{ text: 'Close →', url: '/' }]} />
+            <TopSection
+                title="Settings"
+                buttons={[{ text: "Close →", url: "/" }]}
+            />
         </div>
 
         <div class="column-section-wrapper rounded-box">
             <div class="column-section">
-                <div class="column">
-                    <h4 class="no-user-select">File location</h4>
-                    <span>Default</span>
+                <div class="column row-section">
+                    <OptionDescription
+                        title="Hali File location"
+                        span={fileDir}
+                    />
+                    <div class="button-box no-user-select">
+                        <button on:click={changeDir}>Change</button>
+                        <button on:click={resetDir}>Reset</button>
+                    </div>
                 </div>
                 <div class="column">
-                    <h4 class="no-user-select">Version</h4>
-                    <span>0.0.0</span>
+                    <OptionDescription title="Version" span="0.0.0" />
                 </div>
             </div>
         </div>
@@ -84,18 +146,44 @@
             background-color: rgb(41, 41, 41);
         }
     }
-    .column > h4 {
-        font-weight: 600;
-        font-size: 16px;
-        margin: 0px;
-    }
-    .column > span {
-        font-weight: 500;
-        font-size: 13px;
 
-        color: rgb(177, 177, 177);
-        @media (prefers-color-scheme: dark) {
-            color: rgb(95, 95, 95);
-        }
+    .row-section {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 14px;
+    }
+
+    .button-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: stretch;
+
+        gap: 6px;
+    }
+
+    button {
+        border: none;
+        background: none;
+
+        padding: 5px 15px;
+        color: rgb(225, 225, 225);
+        background-color: cornflowerblue;
+        font-size: 10px;
+        font-weight: 700;
+        border-radius: 7px;
+
+        transition: all 0.16s ease-out;
+        transform: none;
+    }
+    button:hover {
+        color: white;
+        background-color: rgb(141, 180, 252);
+    }
+    button:active {
+        transform: scale(1.1, 1.1);
+        background-color: rgb(141, 180, 252);
     }
 </style>

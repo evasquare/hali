@@ -1,15 +1,15 @@
 <script lang="ts">
-    import { platform } from '@tauri-apps/api/os';
+    import { platform } from "@tauri-apps/api/os";
 
-    import { fly } from 'svelte/transition';
+    import { fly } from "svelte/transition";
 
-    import CheckBox from './CheckBox.svelte';
-    import { saveTodoListFromHali } from '../../others/helpers';
-    import { endOfTodosStore, todoListPromiseStore } from '../../others/store';
-    import SubmitForm from './SubmitForm.svelte';
-    import TopSection from '../TopSection.svelte';
+    import CheckBox from "./CheckBox.svelte";
+    import { endOfTodosStore, todoListPromiseStore } from "../../others/store";
+    import { saveTodoList } from "../../others/helpers";
+    import SubmitForm from "./SubmitForm.svelte";
+    import TopSection from "../TopSection.svelte";
 
-    import type { Todo } from '../../others/types';
+    import type { Todo } from "../../others/types";
 
     let endOfTodos: HTMLDivElement | null = null;
     $: {
@@ -21,18 +21,18 @@
     let todoListPromise: Promise<Todo[]>;
     todoListPromiseStore.subscribe((newTodoListPromise) => {
         todoListPromise = newTodoListPromise;
-        saveTodoListFromHali(newTodoListPromise);
+        saveTodoList(newTodoListPromise);
     });
 
     let draggingRegionHeight = 15;
     $: {
         let platformPromise = platform();
         platformPromise.then((platform) => {
-            if (platform == 'darwin') {
+            if (platform == "darwin") {
                 draggingRegionHeight = 30;
             }
             document.body.style.setProperty(
-                '--dragging-region-height',
+                "--dragging-region-height",
                 `${draggingRegionHeight}px`
             );
         });
@@ -42,7 +42,10 @@
 <div class="transition-block" in:fly={{ x: 400 }} out:fly={{ x: -400 }}>
     <div class="page-wrapper">
         <div class="top-section-wrapper">
-            <TopSection title="Todos " buttons={[{ text: 'Settings →', url: '/settings' }]} />
+            <TopSection
+                title="Todos "
+                buttons={[{ text: "Settings →", url: "/settings" }]}
+            />
         </div>
 
         <div class="column-section-wrapper">
@@ -132,6 +135,9 @@
             background-color: #202020;
         }
 
-        margin-top: calc(var(--dragging-region-height) - calc(var(--dragging-region-height)) / 2);
+        margin-top: calc(
+            var(--dragging-region-height) - calc(var(--dragging-region-height)) /
+                2
+        );
     }
 </style>
