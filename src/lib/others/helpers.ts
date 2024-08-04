@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api";
+import { message } from "@tauri-apps/api/dialog";
 import {
     BaseDirectory,
     createDir,
@@ -6,9 +7,9 @@ import {
     readTextFile,
     writeTextFile,
 } from "@tauri-apps/api/fs";
+import { exit } from "@tauri-apps/api/process";
 
 import type { Config, ParseResult, Todo } from "./types";
-
 /** @example
  * await delay(5000);
  */
@@ -143,3 +144,8 @@ export const saveConfig = async (configPromise: Config): Promise<void> => {
         dir: BaseDirectory.AppData,
     });
 };
+
+const crash = async (text: string) => {
+    await message(text, 'Confirm');
+    exit();
+}
