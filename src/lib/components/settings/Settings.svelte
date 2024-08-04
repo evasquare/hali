@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { open } from "@tauri-apps/api/dialog";
-    import { relaunch } from "@tauri-apps/api/process";
-    import { fly } from "svelte/transition";
+    import { open } from '@tauri-apps/api/dialog';
+    import { relaunch } from '@tauri-apps/api/process';
+    import { fly } from 'svelte/transition';
 
-    import OptionDescription from "./OptionDescription.svelte";
-    import { getConfig, saveConfig } from "../../others/helpers";
-    import type { Config } from "../../others/types";
-    import TopSection from "../TopSection.svelte";
+    import OptionDescription from './OptionDescription.svelte';
+    import { getConfig, saveConfig } from '../../others/helpers';
+    import type { Config } from '../../others/types';
+    import TopSection from '../TopSection.svelte';
 
     let config: Config;
     let fileDir: string;
@@ -15,7 +15,7 @@
             config = await getConfig();
 
             if (config.haliPath === null) {
-                fileDir = "Default";
+                fileDir = 'Default';
             } else {
                 fileDir = config.haliPath;
             }
@@ -27,16 +27,16 @@
             currentTarget: EventTarget & HTMLButtonElement;
         }
     ) => {
-        let input = document.createElement("input");
-        input.type = "file";
+        let input = document.createElement('input');
+        input.type = 'file';
 
         const filePath = await open({
             filters: [
                 {
-                    name: "text",
-                    extensions: ["hali"],
-                },
-            ],
+                    name: 'text',
+                    extensions: ['hali']
+                }
+            ]
         });
         if (!filePath) return;
 
@@ -60,19 +60,13 @@
 <div class="transition-block" in:fly={{ x: 400 }} out:fly={{ x: -400 }}>
     <div class="page-wrapper">
         <div class="top-section-wrapper">
-            <TopSection
-                title="Settings"
-                buttons={[{ text: "Close →", url: "/" }]}
-            />
+            <TopSection title="Settings" buttons={[{ text: 'Close →', url: '/' }]} />
         </div>
 
         <div class="column-section-wrapper rounded-box">
             <div class="column-section">
                 <div class="column row-section">
-                    <OptionDescription
-                        title="Hali File location"
-                        span={fileDir}
-                    />
+                    <OptionDescription title="Hali File Location" span={fileDir} />
                     <div class="button-box no-user-select">
                         <button on:click={changeDir}>Change</button>
                         <button on:click={resetDir}>Reset</button>
@@ -169,17 +163,16 @@
         background: none;
 
         padding: 5px 15px;
-        color: rgb(225, 225, 225);
+        color: white;
         background-color: cornflowerblue;
         font-size: 10px;
-        font-weight: 700;
+        font-weight: 500;
         border-radius: 7px;
 
         transition: all 0.16s ease-out;
         transform: none;
     }
     button:hover {
-        color: white;
         background-color: rgb(141, 180, 252);
     }
     button:active {
