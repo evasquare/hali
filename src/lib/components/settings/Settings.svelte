@@ -58,7 +58,9 @@
 
         overflow: scroll;
         overflow-x: hidden;
-        color-scheme: dark;
+        @media (prefers-color-scheme: dark) {
+            color-scheme: dark;
+        }
     }
     .column-section-wrapper > .column-section {
         display: flex;
