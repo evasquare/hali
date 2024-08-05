@@ -53,6 +53,14 @@ struct ParseResult {
 fn parse_hali_format(input: &str) -> ParseResult {
     let mut result_todos: Vec<Todo> = vec![];
 
+    if input.trim().is_empty() {
+        return ParseResult {
+            successful: true,
+            error_message: None,
+            todos: result_todos,
+        };
+    }
+
     for line in input.trim().split('\n') {
         match validate_each_line(line) {
             Ok(todo) => {
