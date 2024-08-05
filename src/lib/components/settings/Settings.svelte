@@ -8,6 +8,8 @@
     import type { Config } from "../../others/types";
     import TopSection from "../TopSection.svelte";
 
+    import packageJson from "../../../../package.json";
+
     let config: Config;
     let fileDir: string;
     $: {
@@ -79,7 +81,10 @@
                     </div>
                 </div>
                 <div class="column">
-                    <OptionDescription title="Version" span="0.0.0" />
+                    <OptionDescription
+                        title="Version"
+                        span={packageJson.version}
+                    />
                 </div>
             </div>
         </div>
