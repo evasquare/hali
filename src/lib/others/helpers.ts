@@ -10,6 +10,11 @@ import {
 import { exit } from "@tauri-apps/api/process";
 
 import type { Config, ParseResult, Todo } from "./types";
+
+export const defaultConfig: Config = {
+    haliPath: null,
+};
+
 /** @example
  * await delay(5000);
  */
@@ -18,11 +23,13 @@ export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export const getTodoList = async (): Promise<Todo[]> => {
     const config = await getConfig();
     if (!config) {
+        await saveConfig(defaultConfig);
         return getAppDataTodoList();
     }
 
     if (config.haliPath !== null) {
         if (!(await exists(config.haliPath))) {
+            await saveConfig(defaultConfig);
             return getAppDataTodoList();
         }
         return getCustomPathTodoList(config.haliPath);
@@ -35,11 +42,13 @@ export const saveTodoList = async (
 ): Promise<void> => {
     const config = await getConfig();
     if (!config) {
+        await saveConfig(defaultConfig);
         return;
     }
 
     if (config.haliPath !== null) {
         if (!(await exists(config.haliPath))) {
+            await saveConfig(defaultConfig);
             saveAppDataTodoList(todoListPromise);
             return;
         }
@@ -125,12 +134,8 @@ export const getConfig = async (): Promise<Config> => {
         const parsedConfig = JSON.parse(configJson);
         return parsedConfig;
     } else {
-        const initialConfig = {
-            haliPath: null,
-        };
-
-        await saveConfig(initialConfig);
-        return initialConfig;
+        await saveConfig(defaultConfig);
+        return defaultConfig;
     }
 };
 export const saveConfig = async (configPromise: Config): Promise<void> => {
@@ -146,6 +151,6 @@ export const saveConfig = async (configPromise: Config): Promise<void> => {
 };
 
 const crash = async (text: string) => {
-    await message(text, 'Confirm');
+    await message(text, "Confirm");
     exit();
-}
+};
