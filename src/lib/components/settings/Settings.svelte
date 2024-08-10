@@ -36,7 +36,7 @@
             filters: [
                 {
                     name: "text",
-                    extensions: ["hali"],
+                    extensions: ["txt", "hali"],
                 },
             ],
         });
