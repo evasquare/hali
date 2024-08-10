@@ -110,6 +110,8 @@
     }
     .column-section-wrapper > .column-section {
         padding: 2px 0px;
+        row-gap: 2px;
+
         display: flex;
         flex-direction: column;
         justify-content: center;

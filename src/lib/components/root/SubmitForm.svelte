@@ -50,7 +50,6 @@
         type="text"
         class="text-input"
         placeholder="Add something here..."
-        maxlength="43"
         bind:value={inputValue}
     />
     <button class={submitButtonClass}>Add</button>

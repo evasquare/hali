@@ -47,63 +47,60 @@
     };
 </script>
 
-<div class="checkbox-section no-user-select center">
-    <div class="checkbox-wrapper">
-        {#if checked}
-            <!-- prettier-ignore -->
-            <input
-                class="checkbox"
-                type="checkbox"
-                {id}
-                name="scales"
-                checked
-                on:click|preventDefault={toggleCheckbox}
-            />
-            <div class="pseudo-checkbox blue-background">
-                <div class="circle" />
-            </div>
-        {:else}
-            <!-- prettier-ignore -->
-            <input
-                class="checkbox"
-                type="checkbox"
-                {id}
-                name="scales"
-                on:click|preventDefault={toggleCheckbox}
-            />
-            <div class="pseudo-checkbox gray-background" />
-        {/if}
+<div class="component-wrapper no-user-select">
+    <div class="flex-row">
+        <div class="checkbox-wrapper">
+            {#if checked}
+                <!-- prettier-ignore -->
+                <input
+                    class="checkbox"
+                    type="checkbox"
+                    {id}
+                    name="scales"
+                    checked
+                    on:click|preventDefault={toggleCheckbox}
+                />
+                <div class="pseudo-checkbox blue-background">
+                    <div class="circle" />
+                </div>
+            {:else}
+                <!-- prettier-ignore -->
+                <input
+                    class="checkbox"
+                    type="checkbox"
+                    {id}
+                    name="scales"
+                    on:click|preventDefault={toggleCheckbox}
+                />
+                <div class="pseudo-checkbox gray-background" />
+            {/if}
+        </div>
+        <button class="delete-button" on:click={deleteElement}>X</button>
     </div>
 
-    <button class="delete-button" on:click={deleteElement}>X</button>
     <label for={id}>{labelName}</label>
 </div>
 
 <style>
-    .center {
+    .component-wrapper {
+        width: 100%;
+
+        column-gap: 8px;
+
         display: flex;
-        flex-direction: row;
-        justify-content: center;
-    }
-    .gray-background {
-        background-color: rgb(177, 177, 177);
-        @media (prefers-color-scheme: dark) {
-            background-color: rgb(95, 95, 95);
-        }
-    }
-    .blue-background {
-        background-color: cornflowerblue;
+        align-items: flex-start;
     }
 
-    .checkbox-section {
+    .flex-row {
+        height: 24px;
+
+        column-gap: 5px;
+
         display: flex;
         flex-direction: row;
         align-items: center;
-
-        column-gap: 5px;
     }
-
-    .delete-button {
+    .flex-row > .delete-button {
         border: none;
         background: none;
 
@@ -129,11 +126,21 @@
         transform: scale(1.2, 1.2);
     }
 
+    .gray-background {
+        background-color: rgb(177, 177, 177);
+        @media (prefers-color-scheme: dark) {
+            background-color: rgb(95, 95, 95);
+        }
+    }
+    .blue-background {
+        background-color: cornflowerblue;
+    }
+
     .checkbox-wrapper {
         position: relative;
         display: flex;
         justify-content: center;
-        align-items: center;
+        height: min-content;
     }
     .checkbox-wrapper > .pseudo-checkbox {
         z-index: -50;
@@ -147,6 +154,7 @@
 
         border-radius: 50px;
     }
+
     .pseudo-checkbox > .circle {
         width: 6px;
         height: 6px;
@@ -175,6 +183,10 @@
     label {
         margin-left: 3px;
         transition: all 0.16s ease-out;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        word-break: break-all;
     }
     label:hover {
         color: rgb(162, 162, 162);
