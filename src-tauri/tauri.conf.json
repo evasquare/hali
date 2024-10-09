@@ -97,7 +97,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "net.pixelbracket.hali",
+      "identifier": "com.evasquare.hali",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
