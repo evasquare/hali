@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { platform } from "@tauri-apps/api/os";
+    import { platform } from "@tauri-apps/plugin-os";
     let platformPromise = platform();
 </script>
 
 {#await platformPromise}
     <span>Loading platform information...</span>
 {:then platform}
-    {#if platform == "darwin"}
+    {#if platform == "macos"}
         <div data-tauri-drag-region class="dragging-region" />
     {:else}
         <div class="dragging-region" />

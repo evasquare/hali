@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { open } from "@tauri-apps/api/dialog";
-    import { relaunch } from "@tauri-apps/api/process";
+    import { open } from "@tauri-apps/plugin-dialog";
+    import { relaunch } from "@tauri-apps/plugin-process";
     import { fly } from "svelte/transition";
 
     import OptionDescription from "./OptionDescription.svelte";

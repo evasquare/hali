@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { platform } from "@tauri-apps/api/os";
+    import { platform } from "@tauri-apps/plugin-os";
 
     import { fly } from "svelte/transition";
 
@@ -27,15 +27,14 @@
     let draggingRegionHeight = 15;
     $: {
         let platformPromise = platform();
-        platformPromise.then((platform) => {
-            if (platform == "darwin") {
-                draggingRegionHeight = 30;
-            }
-            document.body.style.setProperty(
-                "--dragging-region-height",
-                `${draggingRegionHeight}px`
-            );
-        });
+
+        if (platform() == "macos") {
+            draggingRegionHeight = 30;
+        }
+        document.body.style.setProperty(
+            "--dragging-region-height",
+            `${draggingRegionHeight}px`
+        );
     }
 </script>
 

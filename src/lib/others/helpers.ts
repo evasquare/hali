@@ -1,13 +1,13 @@
-import { invoke } from "@tauri-apps/api";
-import { message } from "@tauri-apps/api/dialog";
+import { invoke } from "@tauri-apps/api/core";
+import { message } from "@tauri-apps/plugin-dialog";
 import {
     BaseDirectory,
-    createDir,
     exists,
+    mkdir,
     readTextFile,
     writeTextFile,
-} from "@tauri-apps/api/fs";
-import { exit } from "@tauri-apps/api/process";
+} from "@tauri-apps/plugin-fs";
+import { exit } from "@tauri-apps/plugin-process";
 
 import type { Config, ParseResult, Todo } from "./types";
 
@@ -84,14 +84,14 @@ export const saveCustomPathTodoList = async (
 };
 
 export const getAppDataTodoList = async (): Promise<Todo[]> => {
-    await createDir("users", {
-        dir: BaseDirectory.AppData,
+    await mkdir("users", {
+        baseDir: BaseDirectory.AppLocalData,
         recursive: true,
     });
 
-    if (await exists("todos.hali", { dir: BaseDirectory.AppData })) {
+    if (await exists("todos.hali", { baseDir: BaseDirectory.AppLocalData })) {
         const todoListHali = await readTextFile("todos.hali", {
-            dir: BaseDirectory.AppData,
+            baseDir: BaseDirectory.AppLocalData,
         });
         const parseResult: ParseResult = await invoke("parse_hali_format", {
             input: todoListHali,
@@ -108,8 +108,8 @@ export const getAppDataTodoList = async (): Promise<Todo[]> => {
 export const saveAppDataTodoList = async (
     todoListPromise: Promise<Todo[]>
 ): Promise<void> => {
-    await createDir("users", {
-        dir: BaseDirectory.AppData,
+    await mkdir("users", {
+        baseDir: BaseDirectory.AppLocalData,
         recursive: true,
     });
 
@@ -117,19 +117,19 @@ export const saveAppDataTodoList = async (
         input: await todoListPromise,
     });
     await writeTextFile("todos.hali", stringifiedTodoList, {
-        dir: BaseDirectory.AppData,
+        baseDir: BaseDirectory.AppLocalData,
     });
 };
 
 export const getConfig = async (): Promise<Config> => {
-    await createDir("users", {
-        dir: BaseDirectory.AppData,
+    await mkdir("users", {
+        baseDir: BaseDirectory.AppLocalData,
         recursive: true,
     });
 
-    if (await exists("config.json", { dir: BaseDirectory.AppData })) {
+    if (await exists("config.json", { baseDir: BaseDirectory.AppLocalData })) {
         const configJson = await readTextFile("config.json", {
-            dir: BaseDirectory.AppData,
+            baseDir: BaseDirectory.AppLocalData,
         });
         const parsedConfig = JSON.parse(configJson);
         return parsedConfig;
@@ -139,14 +139,14 @@ export const getConfig = async (): Promise<Config> => {
     }
 };
 export const saveConfig = async (configPromise: Config): Promise<void> => {
-    await createDir("users", {
-        dir: BaseDirectory.AppData,
+    await mkdir("users", {
+        baseDir: BaseDirectory.AppLocalData,
         recursive: true,
     });
 
     const stringifiedConfig = JSON.stringify(await configPromise, null, 4);
     await writeTextFile("config.json", stringifiedConfig, {
-        dir: BaseDirectory.AppData,
+        baseDir: BaseDirectory.AppLocalData,
     });
 };
 
