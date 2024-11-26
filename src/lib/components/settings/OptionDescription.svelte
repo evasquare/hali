@@ -1,6 +1,9 @@
 <script lang="ts">
-    export let title: string;
-    export let span: string;
+    interface Props {
+        title: string;
+        span: string;
+    }
+    let { title, span }: Props = $props();
 </script>
 
 <div>

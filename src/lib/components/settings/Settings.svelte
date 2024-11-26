@@ -10,9 +10,9 @@
 
     import packageJson from "../../../../package.json";
 
-    let config: Config;
-    let fileDir: string;
-    $: {
+    let config: Config = $state({ haliPath: null });
+    let fileDir: string = $state("");
+    $effect(() => {
         (async () => {
             config = await getConfig();
 
@@ -22,7 +22,7 @@
                 fileDir = config.haliPath;
             }
         })();
-    }
+    });
 
     const changeDir = async (
         e: MouseEvent & {
@@ -76,8 +76,8 @@
                         span={fileDir}
                     />
                     <div class="button-box no-user-select">
-                        <button on:click={changeDir}>Change</button>
-                        <button on:click={resetDir}>Reset</button>
+                        <button onclick={changeDir}>Change</button>
+                        <button onclick={resetDir}>Reset</button>
                     </div>
                 </div>
                 <div class="column">

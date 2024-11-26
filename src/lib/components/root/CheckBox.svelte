@@ -2,17 +2,22 @@
     import { todoListPromiseStore } from "../../others/store";
     import type { Todo } from "../../others/types";
 
-    export let finished: boolean;
-    export let labelName: string;
-    export let id: string;
+    interface Props {
+        finished: boolean;
+        labelName: string;
+        id: string;
+    }
+    let { finished, labelName, id }: Props = $props();
 
-    $: checked = finished ?? false;
+    let checked = $state(finished ?? false);
 
     const toggleCheckbox = (
         event: MouseEvent & {
             currentTarget: EventTarget & HTMLInputElement;
         }
     ) => {
+        event.preventDefault();
+
         checked = !checked;
         todoListPromiseStore.update(async (originalTodoListPromise) => {
             const newTodoList = await originalTodoListPromise;
@@ -58,10 +63,10 @@
                     {id}
                     name="scales"
                     checked
-                    on:click|preventDefault={toggleCheckbox}
+                    onclick={toggleCheckbox}
                 />
                 <div class="pseudo-checkbox blue-background">
-                    <div class="circle" />
+                    <div class="circle"></div>
                 </div>
             {:else}
                 <!-- prettier-ignore -->
@@ -70,12 +75,12 @@
                     type="checkbox"
                     {id}
                     name="scales"
-                    on:click|preventDefault={toggleCheckbox}
+                    onclick={toggleCheckbox}
                 />
-                <div class="pseudo-checkbox gray-background" />
+                <div class="pseudo-checkbox gray-background"></div>
             {/if}
         </div>
-        <button class="delete-button" on:click={deleteElement}>X</button>
+        <button class="delete-button" onclick={deleteElement}>X</button>
     </div>
 
     <label for={id}>{labelName}</label>

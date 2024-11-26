@@ -9,7 +9,7 @@
         submitButtonClass = "submit-button";
     };
 
-    let endOfTodos: HTMLDivElement | null;
+    let endOfTodos: HTMLDivElement | undefined;
     endOfTodosStore.subscribe((value) => {
         endOfTodos = value;
     });
@@ -27,7 +27,7 @@
         if (inputValue === "" || inputValue.split(" ").join("").length < 1)
             return;
 
-        if (endOfTodos !== null) {
+        if (endOfTodos !== null && endOfTodos) {
             scrollToEnd(endOfTodos);
         }
 

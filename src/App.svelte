@@ -25,7 +25,7 @@
     </Route>
 </main>
 
-<svelte:window on:keydown={onKeyDown} />
+<svelte:window onkeydown={onKeyDown} />
 
 <style>
     main {

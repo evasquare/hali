@@ -11,23 +11,21 @@
 
     import type { Todo } from "../../others/types";
 
-    let endOfTodos: HTMLDivElement | null = null;
-    $: {
+    let endOfTodos: HTMLDivElement | undefined;
+    $effect(() => {
         endOfTodosStore.update(() => {
             return endOfTodos;
         });
-    }
+    });
 
-    let todoListPromise: Promise<Todo[]>;
+    let todoListPromise: undefined | Promise<Todo[]> = $state();
     todoListPromiseStore.subscribe((newTodoListPromise) => {
         todoListPromise = newTodoListPromise;
         saveTodoList(newTodoListPromise);
     });
 
     let draggingRegionHeight = 15;
-    $: {
-        let platformPromise = platform();
-
+    $effect(() => {
         if (platform() == "macos") {
             draggingRegionHeight = 30;
         }
@@ -35,7 +33,7 @@
             "--dragging-region-height",
             `${draggingRegionHeight}px`
         );
-    }
+    });
 </script>
 
 <div class="transition-block" in:fly={{ x: 400 }} out:fly={{ x: -400 }}>
@@ -52,24 +50,26 @@
                 {#await todoListPromise}
                     <span>Loading todos...</span>
                 {:then todoList}
-                    {#each todoList as todo, index}
-                        <CheckBox
-                            id={index.toString()}
-                            finished={todo.finished}
-                            labelName={todo.text}
-                        />
-                    {/each}
+                    {#if todoList}
+                        {#each todoList as todo, index}
+                            <CheckBox
+                                id={index.toString()}
+                                finished={todo.finished}
+                                labelName={todo.text}
+                            />
+                        {/each}
+                    {/if}
                 {:catch error}
                     <span>{error}</span>
                 {/await}
-                <div bind:this={endOfTodos} />
+                <div bind:this={endOfTodos}></div>
             </div>
         </div>
 
         <div class="bottom-section">
             <SubmitForm />
             <div class="absolute-wrapper">
-                <div class="hide" />
+                <div class="hide"></div>
             </div>
         </div>
     </div>

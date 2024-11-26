@@ -7,9 +7,9 @@
     <span>Loading platform information...</span>
 {:then platform}
     {#if platform == "macos"}
-        <div data-tauri-drag-region class="dragging-region" />
+        <div data-tauri-drag-region class="dragging-region"></div>
     {:else}
-        <div class="dragging-region" />
+        <div class="dragging-region"></div>
     {/if}
 {/await}
 
