@@ -9,7 +9,9 @@
     import TopSection from "../TopSection.svelte";
 
     import packageJson from "../../../../package.json";
+    import { type } from "@tauri-apps/plugin-os";
 
+    let narrowerSettingsWidth = $state(true);
     let config: Config = $state({ haliPath: null });
     let fileDir: string = $state("");
     $effect(() => {
@@ -57,6 +59,15 @@
         await saveConfig(config);
         relaunch();
     };
+
+    $effect(() => {
+        (async () => {
+            const osType = await type();
+            if (osType === "macos") {
+                narrowerSettingsWidth = false;
+            }
+        })();
+    });
 </script>
 
 <div class="transition-block" in:fly={{ x: 400 }} out:fly={{ x: -400 }}>
@@ -69,7 +80,11 @@
         </div>
 
         <div class="column-section-wrapper rounded-box">
-            <div class="column-section">
+            <div
+                class="column-section {narrowerSettingsWidth
+                    ? 'narrower-column'
+                    : 'normal-column'}"
+            >
                 <div class="column row-section">
                     <OptionDescription
                         title="Hali File Location"
@@ -129,6 +144,7 @@
             color-scheme: dark;
         }
     }
+
     .column-section-wrapper > .column-section {
         display: flex;
         flex-direction: column;
@@ -136,6 +152,14 @@
         align-items: stretch;
 
         row-gap: 10px;
+    }
+
+    .column-section-wrapper > .narrower-column {
+        width: 97%;
+    }
+
+    .column-section-wrapper > .normal-column {
+        width: 100%;
     }
 
     .column-section > .column {
