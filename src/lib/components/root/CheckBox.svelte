@@ -22,7 +22,7 @@
         todoListPromiseStore.update(async (originalTodoListPromise) => {
             const newTodoList = await originalTodoListPromise;
             for (let i = 0; i < newTodoList.length; i++) {
-                if (i.toString() === id) {
+                if (newTodoList[i].id.toString() === id) {
                     newTodoList[i].finished = checked;
                 }
             }
@@ -41,7 +41,7 @@
             const newTodoList: Todo[] = [];
 
             for (let i = 0; i < originalTodoList.length; i++) {
-                if (i.toString() === id) {
+                if (originalTodoList[i].id.toString() === id) {
                     continue;
                 }
                 newTodoList.push(originalTodoList[i]);

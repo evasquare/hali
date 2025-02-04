@@ -14,14 +14,17 @@ mod parse_hali_format {
             error_message: None,
             todos: vec![
                 Todo {
+                    id: 0,
                     finished: false,
                     text: "Task 1".to_string(),
                 },
                 Todo {
+                    id: 1,
                     finished: true,
                     text: "Task 2".to_string(),
                 },
                 Todo {
+                    id: 2,
                     finished: false,
                     text: "Task 3".to_string(),
                 },
@@ -45,14 +48,17 @@ mod parse_hali_format {
             error_message: None,
             todos: vec![
                 Todo {
+                    id: 0,
                     finished: false,
                     text: "Task 1".to_string(),
                 },
                 Todo {
+                    id: 1,
                     finished: true,
                     text: "Task 2".to_string(),
                 },
                 Todo {
+                    id: 2,
                     finished: false,
                     text: "Task 3".to_string(),
                 },

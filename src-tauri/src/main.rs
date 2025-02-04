@@ -11,11 +11,12 @@ mod testing;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct Todo {
+    id: usize,
     finished: bool,
     text: String,
 }
 
-fn validate_each_line(line: &str) -> Result<Todo, Box<dyn Error>> {
+fn validate_each_line(line: &str, index: &mut Box<usize>) -> Result<Todo, Box<dyn Error>> {
     let error_message = r#"Invalid Syntax:
 There's a line that doesn't start with `- [] ` or `- [x] `."#;
 
@@ -23,6 +24,11 @@ There's a line that doesn't start with `- [] ` or `- [x] `."#;
         let splitted_line = line.split("- [] ").last();
         match splitted_line {
             Some(splitted_line) => Ok(Todo {
+                id: {
+                    let returning_value = **index;
+                    *index = Box::new(returning_value + 1);
+                    returning_value
+                },
                 finished: false,
                 text: splitted_line.to_string(),
             }),
@@ -32,6 +38,11 @@ There's a line that doesn't start with `- [] ` or `- [x] `."#;
         let splitted_line = line.split("- [x] ").last();
         match splitted_line {
             Some(splitted_line) => Ok(Todo {
+                id: {
+                    let returning_value = **index;
+                    *index = Box::new(returning_value + 1);
+                    returning_value
+                },
                 finished: true,
                 text: splitted_line.to_string(),
             }),
@@ -61,8 +72,9 @@ fn parse_hali_format(input: &str) -> ParseResult {
         };
     }
 
+    let mut index: Box<usize> = Box::new(0);
     for line in input.trim().split('\n') {
-        match validate_each_line(line) {
+        match validate_each_line(line, &mut index) {
             Ok(todo) => {
                 result_todos.push(todo);
             }

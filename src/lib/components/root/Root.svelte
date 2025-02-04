@@ -1,6 +1,5 @@
 <script lang="ts">
     import { platform } from "@tauri-apps/plugin-os";
-
     import { fly } from "svelte/transition";
 
     import CheckBox from "./CheckBox.svelte";
@@ -9,8 +8,25 @@
     import SubmitForm from "./SubmitForm.svelte";
     import TopSection from "../TopSection.svelte";
 
+    import { flip } from "svelte/animate";
+    import { dndzone, type DndEvent } from "svelte-dnd-action";
+
     import type { Todo } from "../../others/types";
 
+    let windowDraggingRegionHeight = 15;
+    $effect(() => {
+        if (platform() == "macos") {
+            windowDraggingRegionHeight = 30;
+        }
+        document.body.style.setProperty(
+            "--dragging-region-height",
+            `${windowDraggingRegionHeight}px`
+        );
+    });
+
+    const todoDraggingAnimationSpeed = 200;
+
+    // When adding new todos, the app scrolls down to `endOfTodos` element.
     let endOfTodos: HTMLDivElement | undefined;
     $effect(() => {
         endOfTodosStore.update(() => {
@@ -18,22 +34,32 @@
         });
     });
 
+    // Reads `todoListPromise` from a store.
     let todoListPromise: undefined | Promise<Todo[]> = $state();
     todoListPromiseStore.subscribe((newTodoListPromise) => {
         todoListPromise = newTodoListPromise;
         saveTodoList(newTodoListPromise);
     });
 
-    let draggingRegionHeight = 15;
+    // todoItems is used when rendering todos.
+    let todoItems: undefined | Todo[] = $state(undefined);
     $effect(() => {
-        if (platform() == "macos") {
-            draggingRegionHeight = 30;
-        }
-        document.body.style.setProperty(
-            "--dragging-region-height",
-            `${draggingRegionHeight}px`
-        );
+        (async () => {
+            todoItems = await todoListPromise;
+        })();
     });
+
+    const handleDndConsider = (e: CustomEvent<DndEvent<Todo>>) => {
+        reorderPromiseStore(e.detail.items);
+    };
+    const handleDndFinalize = (e: CustomEvent<DndEvent<Todo>>) => {
+        reorderPromiseStore(e.detail.items);
+    };
+    const reorderPromiseStore = (newTodoList: Todo[]) => {
+        todoListPromiseStore.update(async () => {
+            return newTodoList;
+        });
+    };
 </script>
 
 <div class="transition-block" in:fly={{ x: 400 }} out:fly={{ x: -400 }}>
@@ -47,21 +73,30 @@
 
         <div class="column-section-wrapper">
             <div class="column-section">
-                {#await todoListPromise}
-                    <span>Loading todos...</span>
-                {:then todoList}
-                    {#if todoList}
-                        {#each todoList as todo, index}
-                            <CheckBox
-                                id={index.toString()}
-                                finished={todo.finished}
-                                labelName={todo.text}
-                            />
+                {#if todoItems}
+                    <section
+                        use:dndzone={{
+                            items: todoItems,
+                            flipDurationMs: todoDraggingAnimationSpeed,
+                        }}
+                        onconsider={handleDndConsider}
+                        onfinalize={handleDndFinalize}
+                    >
+                        {#each todoItems as todo (todo.id)}
+                            <div
+                                animate:flip={{
+                                    duration: todoDraggingAnimationSpeed,
+                                }}
+                            >
+                                <CheckBox
+                                    id={todo.id.toString()}
+                                    finished={todo.finished}
+                                    labelName={todo.text}
+                                />
+                            </div>
                         {/each}
-                    {/if}
-                {:catch error}
-                    <span>{error}</span>
-                {/await}
+                    </section>
+                {/if}
                 <div bind:this={endOfTodos}></div>
             </div>
         </div>
@@ -140,5 +175,9 @@
             var(--dragging-region-height) - calc(var(--dragging-region-height)) /
                 2
         );
+    }
+
+    section {
+        outline: none !important;
     }
 </style>

@@ -35,6 +35,7 @@
             playButtonAnimation();
             const newTodoList = await originalTodoListPromise;
             newTodoList.push({
+                id: newTodoList.length,
                 finished: false,
                 text: inputValue,
             });
