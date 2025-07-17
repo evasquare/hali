@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { todoListPromiseStore } from "../../others/store";
+    import { isLocked, todoListPromiseStore } from "../../others/store";
     import type { Todo } from "../../others/types";
 
     interface Props {
@@ -11,12 +11,18 @@
 
     let checked = $state(finished ?? false);
 
+    let subscribedIsLocked = false;
+    isLocked.subscribe((isLocked) => {
+        subscribedIsLocked = isLocked;
+    });
+
     const toggleCheckbox = (
         event: MouseEvent & {
             currentTarget: EventTarget & HTMLInputElement;
         }
     ) => {
         event.preventDefault();
+        if (subscribedIsLocked) return;
 
         checked = !checked;
         todoListPromiseStore.update(async (originalTodoListPromise) => {
@@ -36,6 +42,8 @@
             currentTarget: EventTarget & HTMLButtonElement;
         }
     ) => {
+        if (subscribedIsLocked) return;
+
         todoListPromiseStore.update(async (originalTodoListPromise) => {
             const originalTodoList = await originalTodoListPromise;
             const newTodoList: Todo[] = [];

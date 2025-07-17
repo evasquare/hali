@@ -3,7 +3,11 @@
     import { fly } from "svelte/transition";
 
     import CheckBox from "./CheckBox.svelte";
-    import { endOfTodosStore, todoListPromiseStore } from "../../others/store";
+    import {
+        endOfTodosStore,
+        isLocked,
+        todoListPromiseStore,
+    } from "../../others/store";
     import { getTodoList, saveTodoList } from "../../others/helpers";
     import SubmitForm from "./SubmitForm.svelte";
     import TopSection from "../TopSection.svelte";
@@ -38,6 +42,7 @@
     // Reads `todoListPromise` from a store.
     let todoListPromise: undefined | Promise<Todo[]> = $state();
     todoListPromiseStore.subscribe(async (newTodoListPromise) => {
+        isLocked.set(true);
         if (considering) {
             todoDraggingAnimationSpeed = 200;
             todoListPromise = newTodoListPromise;
@@ -46,6 +51,7 @@
             await saveTodoList(newTodoListPromise);
             todoListPromise = getTodoList();
         }
+        isLocked.set(false);
     });
 
     // todoItems is used when rendering todos.

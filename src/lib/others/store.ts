@@ -6,3 +6,4 @@ import type { Todo } from "./types";
 
 export const todoListPromiseStore = writable<Promise<Todo[]>>(getTodoList());
 export const endOfTodosStore = writable<HTMLDivElement | undefined>();
+export const isLocked = writable<boolean>();
