@@ -56,10 +56,9 @@
 
     // todoItems is used when rendering todos.
     let todoItems: undefined | Todo[] = $state(undefined);
-    $effect(() => {
-        (async () => {
-            todoItems = await todoListPromise;
-        })();
+
+    todoListPromiseStore.subscribe(async (newTodoListPromise) => {
+        todoItems = await newTodoListPromise;
     });
 
     const handleDndConsider = (e: CustomEvent<DndEvent<Todo>>) => {

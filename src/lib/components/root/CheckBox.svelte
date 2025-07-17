@@ -16,6 +16,10 @@
         subscribedIsLocked = isLocked;
     });
 
+    $effect(() => {
+        console.log(labelName, id);
+    });
+
     const toggleCheckbox = (
         event: MouseEvent & {
             currentTarget: EventTarget & HTMLInputElement;
