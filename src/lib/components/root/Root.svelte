@@ -4,7 +4,7 @@
 
     import CheckBox from "./CheckBox.svelte";
     import { endOfTodosStore, todoListPromiseStore } from "../../others/store";
-    import { saveTodoList } from "../../others/helpers";
+    import { getTodoList, saveTodoList } from "../../others/helpers";
     import SubmitForm from "./SubmitForm.svelte";
     import TopSection from "../TopSection.svelte";
 
@@ -24,7 +24,7 @@
         );
     });
 
-    const todoDraggingAnimationSpeed = 200;
+    let todoDraggingAnimationSpeed = $state(200);
 
     // When adding new todos, the app scrolls down to `endOfTodos` element.
     let endOfTodos: HTMLDivElement | undefined;
@@ -34,11 +34,18 @@
         });
     });
 
+    let considering = $state(false);
     // Reads `todoListPromise` from a store.
     let todoListPromise: undefined | Promise<Todo[]> = $state();
-    todoListPromiseStore.subscribe((newTodoListPromise) => {
-        todoListPromise = newTodoListPromise;
-        saveTodoList(newTodoListPromise);
+    todoListPromiseStore.subscribe(async (newTodoListPromise) => {
+        if (considering) {
+            todoDraggingAnimationSpeed = 200;
+            todoListPromise = newTodoListPromise;
+        } else {
+            todoDraggingAnimationSpeed = 0;
+            await saveTodoList(newTodoListPromise);
+            todoListPromise = getTodoList();
+        }
     });
 
     // todoItems is used when rendering todos.
@@ -50,9 +57,11 @@
     });
 
     const handleDndConsider = (e: CustomEvent<DndEvent<Todo>>) => {
+        considering = true;
         reorderPromiseStore(e.detail.items);
     };
     const handleDndFinalize = (e: CustomEvent<DndEvent<Todo>>) => {
+        considering = false;
         reorderPromiseStore(e.detail.items);
     };
     const reorderPromiseStore = (newTodoList: Todo[]) => {

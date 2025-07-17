@@ -100,6 +100,7 @@ export const getAppDataTodoList = async (): Promise<Todo[]> => {
         if (!parseResult.successful && parseResult.error_message !== "") {
             throw new Error(parseResult.error_message?.toString());
         }
+
         return parseResult.todos;
     } else {
         return [];
