@@ -1,6 +1,4 @@
-<img src="./images/banner.png" alt="project-icon">
-
-# Hali
+<img src="./images/banner.png" alt="Hali">
 
 Hali is an easy-to-use todo app where the app data is stored in a simple text format. It also lets you set your custom file path.
 
