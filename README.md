@@ -6,7 +6,7 @@ Hali is an easy-to-use todo app where the app data is stored in a simple text fo
 
 ## App Preview
 
-<img alt="use-example" src="./images/preview.gif">
+<img alt="use-example" width="300px" src="./images/preview.gif">
 
 ## FAQ
 ### How do I create my own todo file?
