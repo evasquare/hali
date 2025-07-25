@@ -16,10 +16,6 @@
         subscribedIsLocked = isLocked;
     });
 
-    $effect(() => {
-        console.log(labelName, id);
-    });
-
     const toggleCheckbox = (
         event: MouseEvent & {
             currentTarget: EventTarget & HTMLInputElement;
@@ -52,13 +48,10 @@
             const originalTodoList = await originalTodoListPromise;
             const newTodoList: Todo[] = [];
 
-            let newId = 0;
             for (let i = 0; i < originalTodoList.length; i++) {
                 if (originalTodoList[i].id.toString() === id) {
                     continue;
                 }
-                originalTodoList[i].id = newId;
-                newId += 1;
                 newTodoList.push(originalTodoList[i]);
             }
 
