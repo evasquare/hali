@@ -1,15 +1,31 @@
-<!-- <img src="./images/icon.png" alt="project-icon" width="64"> -->
+<img src="./images/banner.png" alt="project-icon">
 
 # Hali
-Hali is a straightforward todo app where the app data is stored in a simple text format. It also lets you set your custom file path.
 
-<div>
-    <img alt="use-example" width="49.4%" src="./images/example1.png">
-    <img alt="options-example" width="49.4%" src="./images/example2.png">
-</div>
+Hali is an easy-to-use todo app where the app data is stored in a simple text format. It also lets you set your custom file path.
 
-```hali
-- [] Learn about ARM Assembly
-- [] Refactor my automation scripts
-- [x] Make a Figma draft
+## App Preview
+
+<img alt="use-example" src="./images/preview.gif">
+
+## FAQ
+### How do I create my own todo file?
+
+You can create an empty `txt` file and choose the file in the app settings.
+
+### How do I update my todos without opening Hali?
+
+Hali uses a syntax that is similiar to checkboxes in Markdown format.
+To update todos, you can simply type `x` in the square brackets.
+
+Before:
+```txt
+- [] Todo A
+- [] Todo B
+```
+
+After:
+```txt
+- [x] Todo A
+- [] Todo B
 ```
