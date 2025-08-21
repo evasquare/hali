@@ -6,6 +6,22 @@
     "main"
   ],
   "permissions": [
+    {
+      "identifier": "fs:scope-appdata-recursive",
+      "allow": [
+        {
+          "path": "$APPDATA"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:scope-appconfig-recursive",
+      "allow": [
+        {
+          "path": "$APPCONFIG"
+        }
+      ]
+    },
     "core:default",
     "fs:allow-read-text-file",
     "fs:allow-write-text-file",
